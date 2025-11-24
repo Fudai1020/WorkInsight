@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineLinkedin } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 const Login = () => {
