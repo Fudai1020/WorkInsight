@@ -17,7 +17,7 @@ const Sidebar = () => {
             </button>
         </div>
         <div>
-        <NavLink to='/dashbord'
+        <NavLink to='/dashboard'
                 className={({isActive})=>`flex items-center gap-3 p-3 rounded-lg cursor-pointer mt-10
                                 transitional-all ${isActive ? 'bg-gray-200':'hover:bg-gray-200'}`}>
         {!isOpen ?
