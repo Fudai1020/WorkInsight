@@ -2,7 +2,7 @@
 
 const TaskPreview = () => {
   return (
-    <div className="border rounded-xl w-full h-[380px]">TaskPreview</div>
+    <div className="border rounded-xl w-full h-full">TaskPreview</div>
   )
 }
 
