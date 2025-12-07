@@ -8,9 +8,9 @@ const Dashboard = () => {
     const dayNames = ["日","月","火","水","木","金","土"];
     const formatDate = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()}(${dayNames[today.getDay()]})`;
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 h-full">
         <span className="text-center text-4xl mt-5">{formatDate}</span>
-        <div className="flex gap-10 justify-center">
+        <div className="flex gap-10 justify-center h-full">
             <TaskPreview/>
             <SchedulePreview/>
         </div>
