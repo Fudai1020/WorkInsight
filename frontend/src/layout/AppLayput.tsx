@@ -4,9 +4,9 @@ import Sidebar from "./Sidebar"
 export const AppLayput = () => {
   return (
     <>
-    <div className="flex">
+    <div className="flex h-screen">
         <Sidebar />
-        <main className="flex-1 p-6 f-screen">
+        <main className="flex-1 p-6 overflow-auto">
             <Outlet/>
         </main>
     </div>
