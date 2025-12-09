@@ -6,6 +6,8 @@ import Register from './pages/Register'
 import { AppLayput } from './layout/AppLayput'
 import Dashboard from './pages/Dashboard'
 import TodoList from './pages/TodoList'
+import Schedule from './pages/Schedule'
+
 
 function App() {
 
@@ -17,6 +19,7 @@ function App() {
       <Route element={<AppLayput/>}>
         <Route path='/dashboard' element={<Dashboard />}/>
         <Route path='/todoList' element={<TodoList/>}/>
+        <Route path='/schedule' element={<Schedule/>}/>
       </Route>
     
     </Routes>
