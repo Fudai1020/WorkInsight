@@ -4,8 +4,11 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useState } from "react";
+import { useModal } from "../context/ModalContext";
 const Schedule = () => {
   const [selectedDate,setSelectedDate] = useState(new Date);
+  const {openModal} = useModal();
+
   return (
     <div className="h-[80vh]">
       <FullCalendar 
@@ -31,7 +34,9 @@ const Schedule = () => {
         height={'100%'}
         />
         <div className="flex justify-center mt-10">
-          <button className="text-2xl p-6 bg-[#D9D9D9] rounded-lg hover:scale-[1.05] transition-transform">予定の追加</button>
+          <button className="text-2xl p-6 bg-[#D9D9D9] rounded-lg hover:scale-[1.05] transition-transform"
+            onClick={() => openModal("schedule",{date:selectedDate})}>
+            予定の追加</button>
         </div>
     </div>
   )
