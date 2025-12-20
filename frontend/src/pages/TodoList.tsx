@@ -12,7 +12,7 @@ const TodoList = () => {
     ]);
     const [selectedId,setSelectedId] = useState<number|null>(null);
   return (
-    <div className="flex  flex-col gap-5  overflow-hidden">
+    <div className="flex  flex-col gap-5">
         <span className="text-center text-3xl font-bold ">タスク一覧</span>
         <main className="flex-1 min-h-0">
         <div className="border rounded-xl  shadow-lg flex  bg-[#F5F5F5] h-full">
