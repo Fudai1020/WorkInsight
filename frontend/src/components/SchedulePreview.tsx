@@ -21,7 +21,7 @@ const SchedulePreview = () => {
         <ul className="w-[80%] flex flex-col gap-4 mt-7 overflow-y-auto">
           {sortedSchedules.map(s => (
             <li key={s.id} className="grid grid-cols-[6rem_1fr] items-center gap-30">
-              <span className="text-2xl whitespace-nowrap">
+              <span className="text-xl whitespace-nowrap">
                 {s.allDay ? "終日":`${s.startTime}〜${s.endTime}`}
               </span>
               <span className="text-2xl truncate">{s.title}</span>
