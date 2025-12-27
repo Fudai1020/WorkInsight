@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
+import { useModal } from "../context/ModalContext";
 
 const Timer = () => {
+    const {openModal} = useModal();
     const InitialSecond = 3600;
     const [seconds,setSeconds] = useState(InitialSecond);
     const [isRunning,setIsRunning] = useState(false);
@@ -36,6 +38,10 @@ const Timer = () => {
                 {isRunning ? '停止':'開始'}
             </button>
             </div>
+            <button onClick={()=> openModal("feedback")}
+                    className="underline">
+                フィードバック
+            </button>
         </div>
     </div>
   )
