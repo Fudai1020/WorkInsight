@@ -1,4 +1,5 @@
 import { useModal } from "../context/ModalContext"
+import FeedbackModal from "./FeedbackModal";
 import ScheduleModal from "./ScheduleModal";
 import TaskModal from "./TaskModal";
 
@@ -12,7 +13,7 @@ const Modal = () => {
             onClick={(e) => e.stopPropagation()}>
             {modalType === "schedule" && <ScheduleModal/>}
             {modalType === "task" && <TaskModal/>}
-
+            {modalType === "feedback" && <FeedbackModal />}
         </div>
     </div>
   )

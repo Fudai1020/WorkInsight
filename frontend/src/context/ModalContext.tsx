@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-type ModalType = ""|"schedule" | "task";
+type ModalType = ""|"schedule" | "task"|"feedback";
 
 interface ModalContextProps {
     isOpen:boolean;
