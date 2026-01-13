@@ -42,13 +42,14 @@ const Sidebar = () => {
             <><GrSchedule size={22} /><span className="text-xl">スケジュール</span></>}
         </NavLink>
         </div>
+        <NavLink to='/profile'
+                    className={({isActive}) => `mt-auto mb-5 flex gap-3 rounded-lg p-3 items-center
+                                transitional-all ${isActive ? 'bg-gray-200':'hover:bg-gray-200'}`}>
         {!isOpen ? 
-        <div className='mt-auto mb-5 flex gap-2 p-3 rounded-[50px] hover:bg-gray-200'>
-            <CiUser size={30}/></div>:
-        <div className='mt-auto mb-5 flex gap-2 p-3 rounded-lg hover:bg-gray-200'>
-        <CiUser size={30} /><span className="text-xl">ユーザ名</span>
-        </div>
+            <CiUser size={30}/>:
+        <><CiUser size={30} /><span className="text-xl">ユーザ名</span></>
         }
+        </NavLink>
     </div>
   )
 }
