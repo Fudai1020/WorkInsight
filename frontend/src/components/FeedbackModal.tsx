@@ -18,7 +18,7 @@ const FeedbackModal = () => {
         </div>
         <div className="flex flex-col items-center gap-4">
             <span className="text-2xl">振り返り</span>
-            <textarea className="bg-[#D9D9D9] w-[30vw] h-[30vh] rounded-lg p-3 hover:scale-[1.05] transition-transform"></textarea>
+            <textarea className="bg-[#D9D9D9] w-[30vw] h-[30vh] rounded-lg p-3 hover:scale-[1.03] transition-transform"></textarea>
         </div>
         <div className="flex gap-20 mt-auto mb-10">
         <button className="bg-[#D9D9D9] p-3 rounded-lg hover:scale-[1.05] transition-transform"

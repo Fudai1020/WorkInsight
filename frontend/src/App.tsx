@@ -8,6 +8,7 @@ import TodoList from './pages/TodoList'
 import Schedule from './pages/Schedule'
 import { ModalProvider } from './context/ModalContext'
 import { AppLayout } from './layout/AppLayout'
+import Profile from './pages/Profile'
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path='/dashboard' element={<Dashboard />}/>
         <Route path='/todoList' element={<TodoList/>}/>
         <Route path='/schedule' element={<Schedule/>}/>
+        <Route path='/profile' element={<Profile/>}/>
       </Route>
     </Routes>
     </ModalProvider>
