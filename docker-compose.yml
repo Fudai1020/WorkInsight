@@ -10,14 +10,24 @@ services:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD","mysqladmin","ping","-h","localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
-    build: ./backend
     container_name: workinsight-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
     ports:
       - "8080:8080"
+    volumes:
+      - "./backend:/app"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/workinsight
       SPRING_DATASOURCE_USERNAME: root
