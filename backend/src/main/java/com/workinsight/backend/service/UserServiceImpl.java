@@ -1,9 +1,7 @@
 package com.workinsight.backend.service;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.workinsight.backend.dto.UserCreateRequest;
+import com.workinsight.backend.dto.UserCreateCommand;
 import com.workinsight.backend.dto.UserLoginRequest;
 import com.workinsight.backend.dto.UserLoginResponse;
 import com.workinsight.backend.dto.UserResponse;
@@ -22,14 +20,13 @@ public class UserServiceImpl implements UserService{
         this.passwordEncoder = passwordEncoder;
     }
     @Override
-    public UserResponse register(UserCreateRequest request){
+    public UserResponse register(UserCreateCommand request){
         if(userRepository.existsByUserEmail(request.getUserEmail())){
             throw new IllegalArgumentException("このメールアドレスはすでに登録済みです");
         }
         UserEntity user = UserEntity.builder()
-            .userName(request.getUserName())
             .userEmail(request.getUserEmail())
-            .userPassword(passwordEncoder.encode(request.getPassword()))
+            .userPassword(passwordEncoder.encode(request.getUserPassword()))
             .isFirstLogin(true)
             .build();
 
