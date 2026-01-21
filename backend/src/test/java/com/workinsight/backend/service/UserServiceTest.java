@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.workinsight.backend.dto.UserCreateRequest;
+import com.workinsight.backend.dto.UserCreateCommand;
 import com.workinsight.backend.dto.UserLoginRequest;
 import com.workinsight.backend.dto.UserLoginResponse;
 import com.workinsight.backend.dto.UserResponse;
@@ -35,10 +35,9 @@ public class UserServiceTest {
 
     @Test
     void ユーザが初回登録できる(){
-        UserCreateRequest request = UserCreateRequest.builder()
-            .userName("test")
+        UserCreateCommand request = UserCreateCommand.builder()
             .userEmail("test@example.com")
-            .password("password")
+            .userPassword("password")
             .build();
 
         when(userRepository.existsByUserEmail(request.getUserEmail()))
@@ -47,22 +46,19 @@ public class UserServiceTest {
             .thenReturn("encoded");
         UserEntity savedUser = UserEntity.builder()
             .userId(1L)
-            .userName("test")
             .userEmail("test@example.com")
             .build();
         when(userRepository.save(any(UserEntity.class)))
                 .thenReturn(savedUser);
         UserResponse response = userServiceImpl.register(request);
         assertEquals(1L, response.getUserId());
-        assertEquals("test", response.getUserName());
         assertEquals("test@example.com", response.getUserEmail());
     }
     @Test
     void メール重複でエラーを返す(){
-        UserCreateRequest request = UserCreateRequest.builder()
-            .userName("test")
+        UserCreateCommand request = UserCreateCommand.builder()
             .userEmail("test@example.com")
-            .password("password")
+            .userPassword("password")
             .build();
         when(userRepository.existsByUserEmail(request.getUserEmail()))
             .thenReturn(true);
@@ -75,7 +71,6 @@ public class UserServiceTest {
 
         UserEntity user = UserEntity.builder()
             .userId(1L)
-            .userName("test")
             .userEmail("test@example.com")
             .userPassword("encoded")
             .isFirstLogin(true)
@@ -87,7 +82,6 @@ public class UserServiceTest {
             .thenReturn(true);
         UserLoginResponse response = userServiceImpl.login(request);
         assertEquals(1L, response.getUserId());
-        assertEquals("test", response.getUserName());
         assertEquals(true, response.isFirstLogin());
         verify(userRepository).findByUserEmail("test@example.com");
         verify(passwordEncoder).matches("password", "encoded");
@@ -106,7 +100,6 @@ public class UserServiceTest {
         UserLoginRequest request = new UserLoginRequest("test@example.com","wrongPassword");
         UserEntity user = UserEntity.builder()
             .userId(1L)
-            .userName("test")
             .userEmail("test@example.com")
             .userPassword("encoded")
             .build();

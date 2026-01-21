@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UserCreateRequest {
-    @NotBlank
-    private String userName;
     @Email
     @NotBlank
     private String userEmail;
     @NotBlank
     private String password;
+    @NotBlank
+    private String confirmPassword;
 }
