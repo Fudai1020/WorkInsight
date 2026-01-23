@@ -9,6 +9,7 @@ import com.workinsight.backend.dto.UserLoginRequest;
 import com.workinsight.backend.dto.UserLoginResponse;
 import com.workinsight.backend.dto.UserResponse;
 import com.workinsight.backend.exception.PasswordMismatchException;
+import com.workinsight.backend.security.JwtTokenProvider;
 import com.workinsight.backend.service.UserService;
 
 import jakarta.validation.Valid;
@@ -22,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
-    public UserController(UserService userService){
+    private final JwtTokenProvider jwtTokenProvider;
+    public UserController(UserService userService,JwtTokenProvider jwtTokenProvider){
         this.userService = userService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
     @PostMapping("/register")
     public UserResponse register(@RequestBody @Valid UserCreateRequest request) {
@@ -34,8 +37,10 @@ public class UserController {
     }
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest request) {
-        UserLoginResponse user = userService.login(request);
-        return ResponseEntity.ok(user);
+        UserLoginResponse response = userService.login(request);
+        String token = jwtTokenProvider.generateToken(request.getUserEmail());
+        response.setToken(token);
+        return ResponseEntity.ok(response);
     }
     
 }
