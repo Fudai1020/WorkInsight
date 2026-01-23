@@ -41,6 +41,10 @@ public class UserServiceImpl implements UserService{
     if(!passwordEncoder.matches(request.getPassword(), user.getUserPassword())){
         throw new InvalidPasswordException("パスワードが一致しませんでした");
     }
-    return new UserLoginResponse(user.getUserId(), user.getUserName(), user.getIsFirstLogin());
+    return UserLoginResponse.builder()
+            .userId(user.getUserId())
+            .userEmail(user.getUserEmail())
+            .isFirstLogin(user.getIsFirstLogin())
+            .build();
     }
 }

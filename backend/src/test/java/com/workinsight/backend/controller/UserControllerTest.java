@@ -75,7 +75,11 @@ public class UserControllerTest {
     }
     @Test
     void ユーザがログイン処理に成功する() throws Exception{
-        UserLoginResponse response = new UserLoginResponse(1L, null, true);
+        UserLoginResponse response = UserLoginResponse.builder()
+                                        .userId(1L)
+                                        .userEmail("test@example.com")
+                                        .isFirstLogin(true)
+                                        .build();
         when(userService.login(any(UserLoginRequest.class)))
             .thenReturn(response);
         mockMvc.perform(post("/api/users/login")
