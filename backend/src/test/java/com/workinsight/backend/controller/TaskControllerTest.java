@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.workinsight.backend.dto.TaskFormRequest;
 import com.workinsight.backend.dto.TaskResponse;
 import com.workinsight.backend.enums.TaskPriority;
+import com.workinsight.backend.enums.TaskStatus;
 import com.workinsight.backend.exception.GlobalExceptionHandler;
 import com.workinsight.backend.service.TaskService;
 
@@ -54,11 +55,11 @@ public class TaskControllerTest {
     private TaskService taskService;
     @Test
     void タスクフォームの送信が成功する() throws Exception{
-        TaskResponse response = new TaskResponse(1L, "タスク", TaskPriority.MEDIUM, LocalDate.of(2026, 1, 30), "メモ");
+        TaskResponse response = new TaskResponse(1L, "タスク", TaskPriority.MEDIUM, LocalDate.of(2026, 1, 30), "メモ",TaskStatus.NONE);
         when(taskService.createTask(anyString(), any(TaskFormRequest.class)))
             .thenReturn(response);
         mockMvc.perform(
-            post("/api/tasks/createTask")
+            post("/api/tasks")
                 .principal(() -> "test@example.com")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
