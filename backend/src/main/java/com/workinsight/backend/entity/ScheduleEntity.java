@@ -1,6 +1,8 @@
 package com.workinsight.backend.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -36,11 +38,14 @@ public class ScheduleEntity {
     @Column(name = "schedule_title",nullable = false)
     private String scheduleTitle;
 
+    @Column(name = "schedule_date")
+    private LocalDate scheduleDate;
+
     @Column(name = "schedule_start_time")
-    private LocalDateTime scheduleStarttime;
+    private LocalTime scheduleStarttime;
 
     @Column(name = "schedule_end_time")
-    private LocalDateTime scheduleEndtime;
+    private LocalTime scheduleEndtime;
 
     @Builder.Default
     @Column(name = "is_allday",nullable = false)
