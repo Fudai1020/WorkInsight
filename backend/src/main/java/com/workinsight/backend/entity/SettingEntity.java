@@ -1,5 +1,6 @@
 package com.workinsight.backend.entity;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -8,6 +9,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -51,6 +54,10 @@ public class SettingEntity {
 
     @Column(name = "break_minutes")
     private Integer breakMinutes;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "setting_week")
+    private DayOfWeek settingWeek;
 
     @Builder.Default
     @Column(name = "notify_timer")
