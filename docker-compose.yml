@@ -32,6 +32,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/workinsight
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+      JWT_SWECRET: ThisIsSuperSecureJwtSecretKey1234567890
 
 volumes:
   db-data:

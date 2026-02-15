@@ -8,16 +8,21 @@ import com.workinsight.backend.dto.UserCreateRequest;
 import com.workinsight.backend.dto.UserLoginRequest;
 import com.workinsight.backend.dto.UserLoginResponse;
 import com.workinsight.backend.dto.UserResponse;
+import com.workinsight.backend.dto.UserUpdateRequest;
 import com.workinsight.backend.exception.PasswordMismatchException;
 import com.workinsight.backend.security.JwtTokenProvider;
 import com.workinsight.backend.service.UserService;
 
 import jakarta.validation.Valid;
 
+import java.security.Principal;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 @RestController
@@ -42,6 +47,11 @@ public class UserController {
         UserLoginResponse response = userService.login(request);
         String token = jwtTokenProvider.generateToken(request.getUserEmail());
         response.setToken(token);
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping
+    public ResponseEntity<UserResponse> updateUser(Principal principal, @RequestBody UserUpdateRequest request) {
+        UserResponse response = userService.updateUser(principal.getName(), request);
         return ResponseEntity.ok(response);
     }
     

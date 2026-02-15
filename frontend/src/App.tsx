@@ -17,7 +17,7 @@ function App() {
     <ModalProvider>
     <Routes>
       <Route path='/login' element={<Login />}></Route>
-      <Route path='/register' element={<Register />}></Route>
+      <Route path='/' element={<Register />}></Route>
       <Route element={<AppLayout/>}>
         <Route path='/dashboard' element={<Dashboard />}/>
         <Route path='/todoList' element={<TodoList/>}/>
