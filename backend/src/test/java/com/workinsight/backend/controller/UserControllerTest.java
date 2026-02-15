@@ -34,7 +34,7 @@ public class UserControllerTest {
     private JwtTokenProvider jwtTokenProvider;
     @Test
     void 新規登録リクエストが成功する() throws Exception{
-        UserResponse response = new UserResponse(1L, null, "test@example.com");
+        UserResponse response = new UserResponse(1L, null, "test@example.com",null);
         when(userService.register(any(UserCreateCommand.class)))
             .thenReturn(response);
         mockMvc.perform(

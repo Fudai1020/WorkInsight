@@ -1,6 +1,7 @@
 package com.workinsight.backend.security;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         String token = resloveToken(request);
         if(token != null && jwtTokenProvider.validateToken(token)){
             String userEmail = jwtTokenProvider.getUserEmail(token);
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userEmail, null,null);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userEmail, null,List.of());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -39,5 +40,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             return bearerToken.substring(7);
         }
         return null;
+    }
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request){
+        String path = request.getServletPath();
+        return path.equals("/api/users/login") || path.equals("/api/users/register");
     }
 }

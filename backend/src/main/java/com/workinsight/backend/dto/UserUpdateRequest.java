@@ -2,13 +2,14 @@ package com.workinsight.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserResponse {
-    private Long userId;
+public class UserUpdateRequest {
     private String userName;
     private String userEmail;
     private String userMemo;

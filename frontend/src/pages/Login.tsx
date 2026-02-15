@@ -1,14 +1,15 @@
 import { useState } from "react"
 import { AiOutlineEye, AiOutlineEyeInvisible    } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [userEmail,setUserEmail] = useState('');
     const [userPassword,setUserPassword] = useState('');
     const [error,setError]  = useState('');
     const [showPassword,setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
-    const handleLogin = (e:React.FormEvent) =>{
+    const handleLogin = async(e:React.FormEvent) =>{
         e.preventDefault();
         if(!userEmail || !userPassword){
             setError('メールアドレスまたはパスワードを入力してください');
@@ -17,6 +18,28 @@ const Login = () => {
         if(!userEmail.includes('@')){
             setError('ただしいメールアドレスを入力してください');
             return;
+        }
+        try{
+            const response = await fetch("http://localhost:8080/api/users/login",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    userEmail,
+                    password:userPassword
+                })
+            });
+            const data = await response.json();
+            if(!response.ok){
+                setError(data.message);
+                return;
+            }
+                alert("ログイン成功");
+                localStorage.setItem("token",data.token);
+                navigate("/Dashboard");
+        }catch(err){
+            setError("通信に失敗しました");
         }
     }
     return (
@@ -44,7 +67,7 @@ const Login = () => {
                     </div>
                 </div>
                 <p className="flex gap-10 mt-5">アカウント未作成ですか？  
-                    <Link to='/register' className="text-blue-700 hover:scale-[1.02]">新規作成</Link>
+                    <Link to='/' className="text-blue-700 hover:scale-[1.02]">新規作成</Link>
                 </p>
                 {error &&(
                     <p className="text-red-600 text center">{error}</p>

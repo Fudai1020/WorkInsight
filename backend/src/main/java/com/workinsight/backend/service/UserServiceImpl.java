@@ -5,12 +5,16 @@ import com.workinsight.backend.dto.UserCreateCommand;
 import com.workinsight.backend.dto.UserLoginRequest;
 import com.workinsight.backend.dto.UserLoginResponse;
 import com.workinsight.backend.dto.UserResponse;
+import com.workinsight.backend.dto.UserUpdateRequest;
 import com.workinsight.backend.entity.UserEntity;
 import com.workinsight.backend.exception.InvalidPasswordException;
 import com.workinsight.backend.exception.UserNotFoundException;
 import com.workinsight.backend.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -31,7 +35,7 @@ public class UserServiceImpl implements UserService{
             .build();
 
         UserEntity saved = userRepository.save(user);
-        return new UserResponse(saved.getUserId(),saved.getUserName(), saved.getUserEmail());
+        return new UserResponse(saved.getUserId(),saved.getUserName(), saved.getUserEmail(),saved.getUserMemo());
     }
     @Override
     public UserLoginResponse login(UserLoginRequest request){
@@ -46,5 +50,20 @@ public class UserServiceImpl implements UserService{
             .userEmail(user.getUserEmail())
             .isFirstLogin(user.getIsFirstLogin())
             .build();
+    }
+    @Override
+    public UserResponse updateUser(String email,UserUpdateRequest request){
+        UserEntity user  = userRepository.findByUserEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("存在しないユーザです"));
+        if(request.getUserName() != null) user.setUserName(request.getUserName());
+        if(request.getUserEmail() != null) user.setUserEmail(request.getUserEmail());
+        if(request.getUserMemo() != null) user.setUserMemo(request.getUserMemo());
+        UserEntity saved = userRepository.save(user);
+        return UserResponse.builder()
+                .userId(saved.getUserId())
+                .userName(saved.getUserName())
+                .userEmail(saved.getUserEmail())
+                .userMemo(saved.getUserMemo())
+                .build();
     }
 }
