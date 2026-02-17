@@ -12,8 +12,8 @@ const Dashboard = () => {
     const [todaySchedules,setTodaySchedules] = useState([]);
     useEffect(() => {
       const fetchTodayData = async () => {
-        const token = localStorage.getItem("token");
-        const taskRes = await fetch("http://localhost:8080/api/tasks/dashboard",{
+        const token = localStorage.getItem("token")
+        const taskRes = await fetch("http://localhost:8080/api/tasks?filter=dashboard",{
           headers:{
             Authorization:`Bearer ${token}`
           }

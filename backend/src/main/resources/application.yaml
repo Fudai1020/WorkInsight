@@ -3,7 +3,6 @@ spring:
     name: backend
 
   datasource:
-      url: jdbc:mysql://mysql:3306/workinsight
       username: root
       password: root
     
@@ -16,5 +15,5 @@ spring:
           format_sql:true
 
 jwt:
-    secret: ThisIsSuperSecureJwtSecretKey1234567890}
+    secret: ThisIsSuperSecureJwtSecretKey1234567890
     expiration: 3600000

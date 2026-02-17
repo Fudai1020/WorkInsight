@@ -1,6 +1,7 @@
 services:
   mysql:
     image: mysql:8
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     container_name: workinsight-db
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -10,6 +11,7 @@ services:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
+      - ./mysql/conf.d:/etc/mysql/conf.d
     healthcheck:
       test: ["CMD","mysqladmin","ping","-h","localhost"]
       interval: 5s
@@ -29,7 +31,7 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/workinsight
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/workinsight?serverTimezone=Asia/Tokyo
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       MYSQL_ROOT_HOST: "%"
