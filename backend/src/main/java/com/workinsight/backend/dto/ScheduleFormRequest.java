@@ -16,7 +16,7 @@ public class ScheduleFormRequest {
     private String scheduleTitle;
     private LocalDate scheduleDate;
     private LocalTime startTime;
-    private LocalTime endTime;
+    private LocalTime endTime;  
     private boolean isAllday;
     private String scheduleMemo;
 }
