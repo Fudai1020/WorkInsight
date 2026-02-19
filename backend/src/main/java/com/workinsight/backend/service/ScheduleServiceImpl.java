@@ -30,7 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService{
             .orElseThrow(() -> new UserNotFoundException("ユーザが見当たりません"));
         LocalTime startTime = null;
         LocalTime endTime = null;
-        if(!request.isAllday()){
+        if(!request.isAllDay()){
             if(request.getStartTime() == null || request.getEndTime() == null){
                 throw new IllegalArgumentException("開始・終了時間は必須です");
             }
@@ -45,7 +45,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .scheduleDate(request.getScheduleDate())
                 .scheduleStarttime(startTime)
                 .scheduleEndtime(endTime)
-                .isAllday(request.isAllday())
+                .isAllday(request.isAllDay())
                 .scheduleMemo(request.getScheduleMemo())
                 .user(user)
                 .build();

@@ -1,10 +1,22 @@
 
 import { useModal } from "../context/ModalContext";
 type Props = {
-  tasks:any[];
+  tasks:Task[];
+}
+type Priority = "NONE"|"LOW"|"MEDIUM"|"HIGH";
+type Task = {
+  taskId:number;
+  taskTitle:string;
+  taskPriority:Priority;
 }
 const TaskPreview = ({tasks}:Props) => {
   const {openModal} = useModal();
+  const priorityLabel: Record<Priority,string> ={
+    NONE:"未設定",
+    LOW:"低",
+    MEDIUM:"中",
+    HIGH:"高"
+  }
 
   return (
     <div className="border rounded-xl w-full h-full">
@@ -14,10 +26,10 @@ const TaskPreview = ({tasks}:Props) => {
           {tasks.length === 0 ? (
             <span className="text-2xl">本日のタスクはありません</span>):
             (tasks.map(item => (
-              <li key={item.id} className="grid grid-cols-[auto_1fr_auto] gap-15 items-center">
+              <li key={item.taskId} className="grid grid-cols-[auto_1fr_auto] gap-15 items-center">
                 <input type="checkbox" className="size-5"/>
-                <span className="text-2xl">{item.title}</span>
-                <span className="text-2xl">{item.priority}</span>
+                <span className="text-2xl">{item.taskTitle}</span>
+                <span className="text-2xl">{priorityLabel[item.taskPriority]}</span>
               </li>
           )))
           }

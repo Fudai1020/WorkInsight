@@ -1,7 +1,9 @@
 import { useState } from "react"
 import { useModal } from "../context/ModalContext";
+import { useDashboard } from "../context/DashboardContext";
 
 const TaskModal = () => {
+    const {refreshDashboard} = useDashboard();
     const {closeModal} = useModal();
     const [priority,setPriority] = useState("NONE");
     const [open,setOpen] = useState(false);
@@ -31,6 +33,7 @@ const TaskModal = () => {
                 })
             });
             if(response.ok){
+                await refreshDashboard();
                 closeModal();
             }
         }catch(err){

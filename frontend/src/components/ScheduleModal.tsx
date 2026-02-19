@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { useModal } from "../context/ModalContext";
+import { useDashboard } from "../context/DashboardContext";
 
 
 const ScheduleModal = () => {
+  const {refreshDashboard} = useDashboard();
   const {closeModal} = useModal();
   const [allDay,setAllDay] = useState(false);
   const [scheduleTitle,setScheduleTitle] = useState('');
@@ -18,18 +20,19 @@ const ScheduleModal = () => {
         method:"post",
         headers:{
           Authorization:`Bearer ${token}`,
-          "Content-Type":"application/json; charaset=UTF-8"
+          "Content-Type":"application/json"
         },
         body:JSON.stringify({
           scheduleTitle,
           scheduleDate,
-          startTime,
-          endTime,
-          isAllday:allDay,
+          startTime:allDay ? null : startTime,
+          endTime : allDay ? null : endTime,
+          allDay:allDay,
           scheduleMemo
         })
       });
       if(response.ok){
+        await refreshDashboard();  
         closeModal();
       }
     }catch(err){

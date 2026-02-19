@@ -1,14 +1,20 @@
 import { useModal } from "../context/ModalContext"
 type Props = {
-  schedules:any[];
+  schedules:Schedule[];
 }
-
+type Schedule = {
+  scheduleId:number;
+  scheduleTitle:string;
+  startTime:string;
+  endTime:string;
+  allday:boolean;
+}
 const SchedulePreview = ({schedules}:Props) => {
   const {openModal} = useModal();
   const sortedSchedules = [...schedules].sort((a,b) => {
-    if(a.allDay && !b.allDay) return -1;
-    if(!a.allDay && b.allDay) return 1;
-    if(a.allDay && b.allDay) return 0;
+    if(a.allday && !b.allday) return -1;
+    if(!a.allday && b.allday) return 1;
+    if(a.allday && b.allday) return 0;
     return a.startTime!.localeCompare(b.startTime!);
   })
   return (
@@ -20,11 +26,11 @@ const SchedulePreview = ({schedules}:Props) => {
             <span className="text-center text-2xl">本日の予定はありません</span>
           ):(
           sortedSchedules.map(s => (
-            <li key={s.id} className="grid grid-cols-[6rem_1fr] items-center gap-30">
+            <li key={s.scheduleId} className="grid grid-cols-[6rem_1fr] items-center gap-30">
               <span className="text-xl whitespace-nowrap">
-                {s.allDay ? "終日":`${s.startTime}〜${s.endTime}`}
+                {s.allday ? "終日":`${s.startTime.slice(0,5)}〜${s.endTime.slice(0,5)}`}
               </span>
-              <span className="text-2xl truncate">{s.title}</span>
+              <span className="text-2xl truncate">{s.scheduleTitle}</span>
             </li>
           )))}
         </ul>

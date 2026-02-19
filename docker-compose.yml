@@ -36,6 +36,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
       MYSQL_ROOT_HOST: "%"
       JWT_SWECRET: ThisIsSuperSecureJwtSecretKey1234567890
+      TZ: Asia/Tokyo
 
 volumes:
   db-data:
