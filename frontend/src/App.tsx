@@ -9,12 +9,14 @@ import Schedule from './pages/Schedule'
 import { ModalProvider } from './context/ModalContext'
 import { AppLayout } from './layout/AppLayout'
 import Profile from './pages/Profile'
+import { DashboardProvider } from './context/DashboardContext'
 
 
 function App() {
 
   return (
     <ModalProvider>
+      <DashboardProvider>
     <Routes>
       <Route path='/login' element={<Login />}></Route>
       <Route path='/' element={<Register />}></Route>
@@ -25,6 +27,7 @@ function App() {
         <Route path='/profile' element={<Profile/>}/>
       </Route>
     </Routes>
+    </DashboardProvider>
     </ModalProvider>
   )
 }
