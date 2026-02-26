@@ -16,7 +16,10 @@ import com.workinsight.backend.exception.UserNotFoundException;
 import com.workinsight.backend.repository.TaskRepository;
 import com.workinsight.backend.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class TaskServiceImpl implements TaskService{
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
