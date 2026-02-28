@@ -72,7 +72,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 }
                 case WEEK -> {
                     start = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-                    end = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+                    end = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
                 }
                 case MONTH -> {
                     start = today.withDayOfMonth(1);
@@ -85,4 +85,11 @@ public class ScheduleServiceImpl implements ScheduleService{
                     .map(ScheduleResponse::from)
                     .toList();
     }
+    @Override
+    public List<ScheduleResponse> getScheduleByPeriod(String userEmail,LocalDate start,LocalDate end){
+        return scheduleRepository.findByUser_UserEmailAndScheduleDateBetween(userEmail, start, end)
+                .stream()
+                .map(ScheduleResponse::from)
+                .toList();
+    } 
 }
