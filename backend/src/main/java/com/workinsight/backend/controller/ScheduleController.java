@@ -11,6 +11,7 @@ import com.workinsight.backend.service.ScheduleService;
 import jakarta.validation.Valid;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -38,5 +39,10 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleResponse>> getSchedules(Principal principal,@RequestParam("range") ScheduleRange range) {
         return ResponseEntity.ok(scheduleService.getSchedulesByRange(principal.getName(), range));
     }
+    @GetMapping("/period")
+    public ResponseEntity<List<ScheduleResponse>> getSchedulesByPeriod(Principal principal,@RequestParam LocalDate start,@RequestParam LocalDate end) {
+        return ResponseEntity.ok(scheduleService.getScheduleByPeriod(principal.getName(), start, end));
+    }
+    
     
 }

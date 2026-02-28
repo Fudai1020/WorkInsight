@@ -8,6 +8,44 @@ import { useModal } from "../context/ModalContext";
 const Schedule = () => {
   const [selectedDate,setSelectedDate] = useState(new Date);
   const {openModal} = useModal();
+  const [events,setEvents] = useState<any[]>([]);
+  const fetchSchedule = async(start:string,end:string)=>{
+    try{
+    const token = localStorage.getItem("token");
+    const res = await fetch(`http://localhost:8080/api/schedules/period?start=${start}&end=${end}`,{
+      headers:{
+        Authorization:`Bearer ${token}`,
+      }
+    });
+    const data = await res.json();
+    const formatted = data.map((s:any)=>{
+      let startDateTime;
+      let endDateTime;
+      if(s.allday){
+        return{
+          id:s.scheduleId,
+          title:s.scheduleTitle,
+          start:s.scheduleDate,
+          allDay:true,
+        }
+      }else{
+        startDateTime = `${s.scheduleDate}T${s.startTime}`;
+        endDateTime = `${s.scheduleDate}T${s.endTime}`;
+      }
+      return{
+        id:s.scheduleId,
+        title:s.scheduleTitle,
+        start:startDateTime,
+        end:endDateTime,
+        allDay:s.allday,
+      };
+    });
+    setEvents(formatted);
+  }catch(err){
+    console.error(err);
+  }
+}
+
 
   return (
     <div className="h-[80vh]">
@@ -15,6 +53,12 @@ const Schedule = () => {
         plugins={[dayGridPlugin,timeGridPlugin,listPlugin,interactionPlugin]}
         locale={'ja'}
         initialView="dayGridMonth"
+        events={events}
+        datesSet={(info)=>{
+          const start = info.startStr.slice(0,10);
+          const end = info.endStr.slice(0,10);
+          fetchSchedule(start,end);
+        }}
         headerToolbar={{
           left:'prev,next,today',
           center:'title',
@@ -28,7 +72,6 @@ const Schedule = () => {
         }}
         dateClick={(info) => {
           setSelectedDate(info.date);
-          console.log(selectedDate);
         }}
         selectable={true}
         height={'100%'}
