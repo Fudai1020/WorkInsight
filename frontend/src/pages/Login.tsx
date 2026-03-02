@@ -37,7 +37,11 @@ const Login = () => {
             }
                 alert("ログイン成功");
                 localStorage.setItem("token",data.token);
-                navigate("/Dashboard");
+                if(data.firstLogin){
+                    navigate("/profile",{state:{firstLogin:true}});
+                }else{
+                    navigate("/Dashboard");                    
+                }
         }catch(err){
             setError("通信に失敗しました");
         }

@@ -10,24 +10,30 @@ import { ModalProvider } from './context/ModalContext'
 import { AppLayout } from './layout/AppLayout'
 import Profile from './pages/Profile'
 import { DashboardProvider } from './context/DashboardContext'
+import { UserProvider } from './context/UserContext'
+import { SettingProvider } from './context/SettingContext'
 
 
 function App() {
 
   return (
     <ModalProvider>
-      <DashboardProvider>
-    <Routes>
-      <Route path='/login' element={<Login />}></Route>
-      <Route path='/' element={<Register />}></Route>
-      <Route element={<AppLayout/>}>
-        <Route path='/dashboard' element={<Dashboard />}/>
-        <Route path='/todoList' element={<TodoList/>}/>
-        <Route path='/schedule' element={<Schedule/>}/>
-        <Route path='/profile' element={<Profile/>}/>
-      </Route>
-    </Routes>
-    </DashboardProvider>
+      <UserProvider>
+        <DashboardProvider>
+          <SettingProvider>
+            <Routes>
+              <Route path='/login' element={<Login />}></Route>
+              <Route path='/' element={<Register />}></Route>
+                <Route element={<AppLayout/>}>
+                  <Route path='/dashboard' element={<Dashboard />}/>
+                  <Route path='/todoList' element={<TodoList/>}/>
+                  <Route path='/schedule' element={<Schedule/>}/>
+                  <Route path='/profile' element={<Profile/>}/>
+                </Route>
+            </Routes>
+          </SettingProvider>
+        </DashboardProvider>
+      </UserProvider>
     </ModalProvider>
   )
 }

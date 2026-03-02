@@ -22,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 
 
@@ -53,6 +55,10 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUser(Principal principal, @RequestBody UserUpdateRequest request) {
         UserResponse response = userService.updateUser(principal.getName(), request);
         return ResponseEntity.ok(response);
+    }
+    @GetMapping
+    public ResponseEntity<UserResponse> getUserDate(Principal principal) {
+        return ResponseEntity.ok(userService.getUserData(principal.getName()));
     }
     
 }

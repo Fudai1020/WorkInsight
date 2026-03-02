@@ -43,7 +43,10 @@ public class SettingServiceImpl implements SettingService{
          setting.setRestEndTime(request.getRestEndTime());
          setting.setBreakMinutes(request.getBreakMinutes());
          setting.setSettingWeek(request.getSettingWeek());  
-        SettingEntity saved = settingRepository.save(setting); 
+        SettingEntity saved = settingRepository.save(setting);
+        if(user.getIsFirstLogin()){
+            user.setIsFirstLogin(false);
+        } 
         return SettingResponse.builder()
                 .userId(saved.getUserId())
                 .workStartTime(saved.getWorkStartTime())

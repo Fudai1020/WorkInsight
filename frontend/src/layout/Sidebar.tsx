@@ -6,10 +6,12 @@ import { FcTodoList } from "react-icons/fc";
 import { GrSchedule } from "react-icons/gr";
 import { NavLink } from "react-router-dom";
 import { useModal } from "../context/ModalContext";
+import { useUser } from "../context/UserContext";
 
 const Sidebar = () => {
     const [isOpen,setIsOpen] = useState(true);
     const {closeModal} = useModal();
+    const {userData} = useUser();
   return (
     <div className={`${isOpen ? "w-[250px]":"w-[90px]"} shadow-[4px_0_8px_rgba(0,0,0,0.05)] flex flex-col
                     bg-[#F5F5F5] h-screen p-4 transition-all duration-300 border-r border-gray-200`}>
@@ -47,7 +49,7 @@ const Sidebar = () => {
                                 transitional-all ${isActive ? 'bg-gray-200':'hover:bg-gray-200'}`}>
         {!isOpen ? 
             <CiUser size={30}/>:
-        <><CiUser size={30} /><span className="text-xl">ユーザ名</span></>
+        <><CiUser size={30} /><span className="text-xl">{userData?.userName ?? "ユーザ名"}</span></>
         }
         </NavLink>
     </div>

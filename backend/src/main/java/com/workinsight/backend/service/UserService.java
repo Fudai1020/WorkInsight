@@ -10,4 +10,5 @@ public interface UserService {
     UserResponse register(UserCreateCommand request);
     UserLoginResponse login(UserLoginRequest loginRequest);
     UserResponse updateUser(String email,UserUpdateRequest request);
+    UserResponse getUserData(String email);
 }
