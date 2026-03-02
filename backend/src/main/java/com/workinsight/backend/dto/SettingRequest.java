@@ -2,6 +2,8 @@ package com.workinsight.backend.dto;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +19,5 @@ public class SettingRequest {
     private LocalTime restStartTime;
     private LocalTime restEndTime;
     private Integer breakMinutes;
-    private DayOfWeek settingWeek;
+    private List<DayOfWeek> settingWeek;
 }

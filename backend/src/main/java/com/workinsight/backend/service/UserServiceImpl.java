@@ -66,4 +66,10 @@ public class UserServiceImpl implements UserService{
                 .userMemo(saved.getUserMemo())
                 .build();
     }
+    @Override
+    public UserResponse getUserData(String userEmail){
+        UserEntity user = userRepository.findByUserEmail(userEmail)
+                .orElseThrow(()-> new UserNotFoundException("ユーザが見つかりません"));
+        return UserResponse.from(user);
+    }
 }

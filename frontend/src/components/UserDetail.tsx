@@ -1,12 +1,71 @@
-import { useState } from "react"
-
-const UserDetail = () => {
+import { useEffect, useState } from "react"
+import { useSettings, type WeekDay } from "../context/SettingContext";
+type Props = {
+  firstLogin:boolean;
+}
+const UserDetail = ({firstLogin}:Props) => {
+  const {settings,loading,refreshSetting} = useSettings();
   const [editMode,setEditMode] = useState(false);
-  const [startTime,setStartTime] = useState("9:00");
-  const [endTime,setEndTime] = useState("18:00");
-  const [timer,setTimer] = useState('30');
-  const days = ['なし','月','火','水','木','金','土','日'];
-  const [selectedDays,setSelectedDays] = useState<string[]>(['なし']);
+  const [startTime,setStartTime] = useState("");
+  const [endTime,setEndTime] = useState("");
+  const [restStartTime,setRestStartTime] = useState("");
+  const [restEndTime,setRestEndTime] = useState("");
+  const [timer,setTimer] = useState(0);
+  const days:WeekDay[]=["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY"];
+  const DAY_LABEL : Record<WeekDay,string> = {
+    MONDAY:'月',
+    TUESDAY:'火',
+    WEDNESDAY:'水',
+    THURSDAY:'木',
+    FRIDAY:'金',
+    SATURDAY:'土',
+    SUNDAY:'日'};
+  const [selectedDays,setSelectedDays] = useState<WeekDay[]>([]);
+  useEffect(()=>{
+    if(firstLogin){
+      setEditMode(true);
+    }
+  },[firstLogin]);
+  useEffect(()=>{
+    if(settings){
+      setStartTime(settings.workStartTime);
+      setEndTime(settings.workEndTime);
+      setRestStartTime(settings.restStartTime);
+      setRestEndTime(settings.restEndTime);
+      setTimer(settings.breakMinutes);
+      setSelectedDays(settings.settingWeek);
+    }
+  },[settings]);
+  const updateSetting = async ()=>{
+    try{
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:8080/api/settings",{
+        method:"PUT",
+        headers:{
+          Authorization:`Bearer ${token}`,
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify({
+          workStartTime:startTime,
+          workEndTime:endTime,
+          restStartTime,
+          restEndTime,
+          breakMinutes:timer,
+          settingWeek:selectedDays
+        })
+      });
+      if(!response.ok){
+        const text = await response.text();
+        console.log(text);
+        throw new Error("failed to fetch");
+      }
+      await refreshSetting();
+      setEditMode(false);
+    }catch(err){
+      console.error(err);
+    }
+  }
+  if(loading) return <div>loading...</div>
   return (
     <div className="border rounded-lg mx-10 shadow-md flex flex-col overflow-auto">
       <div className="mt-10">
@@ -15,10 +74,10 @@ const UserDetail = () => {
             <span className="text-3xl">稼働時間：</span>
             {editMode ? 
             <div className="flex gap-5">
-              <input type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)}
+              <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
                       className="bg-[#D9D9D9] rounded-lg p-2 text-2xl text-center w-[35%]"/>
               <span className="text-3xl">〜</span>
-              <input type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)}
+              <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)}
                       className="bg-[#D9D9D9] rounded-lg p-2 text-2xl text-center w-[35%]"/></div>
               :<span className="text-3xl">{startTime}〜{endTime}</span>
             }
@@ -31,12 +90,12 @@ const UserDetail = () => {
             <span className="text-3xl">休憩時間：</span>
             {editMode ? 
             <div className="flex gap-5">
-              <input type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)}
+              <input type="time" value={restStartTime} onChange={(e) => setRestStartTime(e.target.value)}
                       className="bg-[#D9D9D9] rounded-lg p-2 text-2xl text-center w-[35%]"/>
               <span className="text-3xl">〜</span>
-              <input type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)}
+              <input type="time" value={restEndTime} onChange={(e) => setRestEndTime(e.target.value)}
                       className="bg-[#D9D9D9] rounded-lg p-2 text-2xl text-center w-[35%]"/></div>
-              :<span className="text-3xl">{startTime}〜{endTime}</span>
+              :<span className="text-3xl">{restStartTime}〜{restEndTime}</span>
             } 
         </div>
         <div className="border-b mx-[20%] mt-6 "></div>
@@ -47,7 +106,10 @@ const UserDetail = () => {
             <span className="text-3xl">タイマー間隔：</span>
             {editMode ? 
               <div className="flex gap-3">
-                <input type="text" value={timer} onChange={(e) => setTimer(e.target.value)}
+                <input type="text" value={timer} 
+                       onChange={(e) => {
+                        const value = e.target.value;
+                        setTimer(value === ""?0:Number(value))}}
                       className="bg-[#D9D9D9] rounded-lg  text-2xl text-center w-[35%]" />
                 <span className="text-3xl">m</span></div>
                 :<span className="text-3xl">{timer}m</span>
@@ -62,25 +124,23 @@ const UserDetail = () => {
                 <button key={day}
                         className={`p-2 rounded ${selectedDays.includes(day) ? "bg-blue-500":'bg-gray-200'}`}
                         onClick={() => {
-                          if(day === 'なし'){
-                            setSelectedDays(['なし']);
-                            return;
-                          }
-                          const withoutNone = selectedDays.filter(d => d!=='なし');
-                          if(withoutNone.includes(day)){
-                            setSelectedDays(withoutNone.filter(d => d !== day));
+                          if(selectedDays.includes(day)){
+                            setSelectedDays(selectedDays.filter(d => d !== day));
                           }else{
-                            setSelectedDays([...withoutNone,day]);
+                            setSelectedDays([...selectedDays,day]);
                           }
-                        }}>{day}</button>
+                        }}>{DAY_LABEL[day]}</button>
               ))}
             </div>:
-          <span className="text-3xl">{selectedDays}</span>
+          <span className="text-3xl">{selectedDays.length === 0 ? "なし":selectedDays.map(day => DAY_LABEL[day]).join("・")}</span>
           }
         </div>
       </div>
         <button className="mt-auto ml-auto mr-10 bg-[#D9D9D9] p-3 mb-5 rounded-lg text-2xl
-                            hover:scale-[1.05]  transition-transform" onClick={()=>setEditMode(!editMode)}>{editMode ? '保存': '編集'}</button>
+                            hover:scale-[1.05]  transition-transform" 
+                            onClick={()=>{
+                              editMode ? updateSetting():setEditMode(true);
+                            }}>{editMode ? '保存': '編集'}</button>
     </div>
   )
 }

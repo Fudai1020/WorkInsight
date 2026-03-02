@@ -3,11 +3,14 @@ package com.workinsight.backend.entity;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -55,9 +58,14 @@ public class SettingEntity {
     @Column(name = "break_minutes")
     private Integer breakMinutes;
 
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(
+        name = "setting_week_days",
+        joinColumns = @JoinColumn(name = "user_id")
+    )
     @Column(name = "setting_week")
-    private DayOfWeek settingWeek;
+    private List<DayOfWeek> settingWeek;
 
     @Builder.Default
     @Column(name = "notify_timer")
