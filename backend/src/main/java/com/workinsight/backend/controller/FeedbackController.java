@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.workinsight.backend.dto.FeedbackRequest;
 import com.workinsight.backend.dto.FeedbackResponse;
+import com.workinsight.backend.dto.SummaryResponse;
 import com.workinsight.backend.service.FeedbackService;
 
 import jakarta.validation.Valid;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 
 @RestController
@@ -28,6 +31,10 @@ public class FeedbackController {
     public ResponseEntity<FeedbackResponse> createFeedback(Principal principal,@RequestBody @Valid FeedbackRequest request) {
         FeedbackResponse response = feedbackService.createFeedback(principal.getName(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    @GetMapping
+    public ResponseEntity<SummaryResponse> getSummary(Principal principal) {
+        return ResponseEntity.ok(feedbackService.getWorkSummary(principal.getName()));
     }
     
 }
