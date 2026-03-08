@@ -6,11 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class FeedbackRequest {
-    private Integer workHour;
-    private Integer workMinutes;
-    private String feedbackContent;
+public class SummaryResponse {
+    private int workMinutes;
+    private int saboriMinutes;
+    private double saboriRate;
 }

@@ -32,6 +32,7 @@ export const SettingProvider = ({children}:Props) =>{
     const [loading,setLoading] = useState(true);
     const {token} = useAuth();
     const fetchUserData = async() =>{
+        if(!token) return;
         try{
             const response = await fetch("http://localhost:8080/api/settings",{
                 headers:{

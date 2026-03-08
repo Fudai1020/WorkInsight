@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.workinsight.backend.dto.FeedbackRequest;
 import com.workinsight.backend.dto.FeedbackResponse;
+import com.workinsight.backend.dto.SummaryResponse;
 import com.workinsight.backend.entity.FeedbackEntity;
 import com.workinsight.backend.entity.UserEntity;
 import com.workinsight.backend.exception.UserNotFoundException;
@@ -22,10 +23,10 @@ public class FeedbackServiceImpl implements FeedbackService{
     public FeedbackResponse createFeedback(String userEmail,FeedbackRequest request){
         UserEntity user = userRepository.findByUserEmail(userEmail)
             .orElseThrow(() -> new UserNotFoundException("ユーザが見当たりません"));
-        if(request.getWorkHour() < 0 || request.getWorkHour() > 24){
+        if(request.getWorkHour() == null || request.getWorkHour() < 0 || request.getWorkHour() > 24){
             throw new IllegalArgumentException("適切な時間を入力してください");
         }
-        if(request.getWorkMinutes() < 0 || request.getWorkMinutes() > 59 ){
+        if(request.getWorkMinutes() == null || request.getWorkMinutes() < 0 || request.getWorkMinutes() > 59 ){
             throw new IllegalArgumentException("適切な時間を入力してください");
         }
         boolean wasSabori = (request.getFeedbackContent() == null || request.getFeedbackContent().isBlank());
@@ -44,5 +45,15 @@ public class FeedbackServiceImpl implements FeedbackService{
                 .feedbackContent(saved.getFeedbackContent())
                 .wasSabori(saved.getWasSabori())
                 .build();
+    }
+    @Override
+    public SummaryResponse getWorkSummary(String userEmail){
+        Integer workMinutes = feedbackRepository.sumWorkMinutes(userEmail);
+        Integer saboriMinutes = feedbackRepository.sumSaboriMinutes(userEmail);
+        workMinutes = workMinutes == null ? 0 : workMinutes;
+        saboriMinutes = saboriMinutes == null ? 0 :saboriMinutes;
+        int total = workMinutes + saboriMinutes;
+        double saboriRate = total == 0 ? 0 : (double) saboriMinutes / total;
+        return new SummaryResponse(workMinutes,saboriMinutes,saboriRate);
     }
 }

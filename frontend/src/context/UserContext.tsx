@@ -21,6 +21,7 @@ export const UserProvider = ({children}:Props) =>{
     const [loading,setLoading] = useState(true);
     const {token} = useAuth();
     const fetchUser = async () =>{
+        if(!token) return;
         try{
             const response = await fetch("http://localhost:8080/api/users",{
                 headers:{

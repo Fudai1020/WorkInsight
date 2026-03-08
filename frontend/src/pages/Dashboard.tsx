@@ -4,8 +4,6 @@ import SchedulePreview from "../components/SchedulePreview"
 import TaskPreview from "../components/TaskPreview"
 import { useDashboard } from "../context/DashboardContext";
 import { useAuth } from "../context/AuthContext";
-
-
 const Dashboard = () => {
     const {todayTasks,todaySchedules,refreshDashboard} = useDashboard();
     const today = new Date();
@@ -29,7 +27,7 @@ const Dashboard = () => {
       if(token){
         refreshDashboard();
       }
-    },[token])
+    },[token,refreshDashboard]);
   return (
     <div className="flex flex-col gap-8 h-full">
         <span className="text-center text-4xl mt-5">{formatDate}</span>
@@ -37,7 +35,7 @@ const Dashboard = () => {
             <TaskPreview tasks={todayTasks} onToggle={handleToggle}/>
             <SchedulePreview schedules={todaySchedules}/>
         </div>
-        <LazyData/>
+        <LazyData />
     </div>
   )
 }
