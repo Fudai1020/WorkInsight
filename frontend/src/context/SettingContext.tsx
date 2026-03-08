@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode, } from "react";
+import { useAuth } from "./AuthContext";
 export const WEEK_DAYS = [
     "MONDAY",
     "TUESDAY",
@@ -15,7 +16,7 @@ type Settings = {
     restStartTime:string;
     restEndTime:string;
     breakMinutes:number;
-    settingWeek:WeekDay[];
+    settingWeek:WeekDay[]|null;
 }
 type SettingType = {
     settings:Settings | null;
@@ -29,9 +30,9 @@ export const SettingContext = createContext<SettingType | null>(null);
 export const SettingProvider = ({children}:Props) =>{
     const [settings,setSettings] = useState<Settings | null>(null);
     const [loading,setLoading] = useState(true);
+    const {token} = useAuth();
     const fetchUserData = async() =>{
         try{
-            const token = localStorage.getItem("token");
             const response = await fetch("http://localhost:8080/api/settings",{
                 headers:{
                     Authorization:`Bearer ${token}`,
@@ -41,14 +42,16 @@ export const SettingProvider = ({children}:Props) =>{
             const data = await response.json();
             setSettings(data);
         }catch(err){
-            console.error(err);
+            console.error(err); 
         }finally{
             setLoading(false);
         }
     };
     useEffect(()=>{
-        fetchUserData();
-    },[]);
+        if(token){
+            fetchUserData();
+        }
+    },[token]);
 
     return(
         <SettingContext.Provider value={{settings,loading,refreshSetting:fetchUserData}}>

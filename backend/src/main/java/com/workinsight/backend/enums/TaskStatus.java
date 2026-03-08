@@ -1,7 +1,7 @@
 package com.workinsight.backend.enums;
 
 public enum TaskStatus {
-    NONE,
+    TODO,
     DOING,
     DONE,
     SKIPPED

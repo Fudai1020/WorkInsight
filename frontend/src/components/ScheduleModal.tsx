@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useModal } from "../context/ModalContext";
 import { useDashboard } from "../context/DashboardContext";
+import { useAuth } from "../context/AuthContext";
 
 
 const ScheduleModal = () => {
@@ -12,10 +13,11 @@ const ScheduleModal = () => {
   const [startTime,setStartTime] = useState("");
   const [endTime,setEndTime] = useState("");
   const [scheduleMemo,setScheduleMemo] = useState("");
+  const {token} = useAuth();
   const submitForm = async (e:React.FormEvent) =>{
     e.preventDefault();
-    const token = localStorage.getItem("token");
     try{
+      if(!token) return;
       const response = await fetch("http://localhost:8080/api/schedules",{
         method:"post",
         headers:{

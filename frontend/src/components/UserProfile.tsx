@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
 
 const UserProfile = () => {
     const {userData,loading,refreshUser} = useUser();
@@ -7,6 +8,7 @@ const UserProfile = () => {
     const [userEmail,setUserEmail] = useState('');
     const [userMemo,setUserMemo] = useState('');
     const [editMode,setEditMode] = useState(false);
+    const {token} = useAuth();
     useEffect(()=>{
         if(userData){
             setUserName(userData.userName ?? "");
@@ -16,7 +18,7 @@ const UserProfile = () => {
     },[userData]);
     const updateUser = async()=>{
         try{
-            const token = localStorage.getItem("token");
+            if(!token) return;
             const response = await fetch("http://localhost:8080/api/users",{
                 method:"PUT",
                 headers:{

@@ -11,6 +11,7 @@ import com.workinsight.backend.dto.TaskResponse;
 import com.workinsight.backend.dto.UpdateTaskRequest;
 import com.workinsight.backend.entity.TaskEntity;
 import com.workinsight.backend.entity.UserEntity;
+import com.workinsight.backend.enums.TaskStatus;
 import com.workinsight.backend.exception.TaskNotFindException;
 import com.workinsight.backend.exception.UserNotFoundException;
 import com.workinsight.backend.repository.TaskRepository;
@@ -79,4 +80,18 @@ public class TaskServiceImpl implements TaskService{
             task.setTaskStatus(request.getTaskStatus());
         return TaskResponse.from(task);
     } 
+    @Override
+    public TaskResponse updateTaskStatus(Long taskId,String userEmail){
+        TaskEntity task = taskRepository.findById(taskId)
+            .orElseThrow(()->new TaskNotFindException("タスクが存在しません"));
+        if(!task.getUser().getUserEmail().equals(userEmail)){
+            throw new AccessDeniedException("権限がありません");
+        }
+        if(task.getTaskStatus() == TaskStatus.DONE){
+            task.setTaskStatus(TaskStatus.TODO);
+        }else{
+            task.setTaskStatus(TaskStatus.DONE);
+        }
+        return TaskResponse.from(task);
+    }
 }

@@ -2,17 +2,20 @@
 import { useModal } from "../context/ModalContext";
 type Props = {
   tasks:Task[];
+  onToggle:(taskId:number)=>void;
 }
-type Priority = "NONE"|"LOW"|"MEDIUM"|"HIGH";
+type Priority = "TODO"|"LOW"|"MEDIUM"|"HIGH";
+type Status = "TODO"|"DONE";
 type Task = {
   taskId:number;
   taskTitle:string;
   taskPriority:Priority;
+  taskStatus:Status;
 }
-const TaskPreview = ({tasks}:Props) => {
+const TaskPreview = ({tasks,onToggle}:Props) => {
   const {openModal} = useModal();
   const priorityLabel: Record<Priority,string> ={
-    NONE:"未設定",
+    TODO:"未設定",
     LOW:"低",
     MEDIUM:"中",
     HIGH:"高"
@@ -27,7 +30,10 @@ const TaskPreview = ({tasks}:Props) => {
             <span className="text-2xl">本日のタスクはありません</span>):
             (tasks.map(item => (
               <li key={item.taskId} className="grid grid-cols-[auto_1fr_auto] gap-15 items-center">
-                <input type="checkbox" className="size-5"/>
+                <input type="checkbox" 
+                       className="size-5"
+                       checked={item.taskStatus === "DONE"}
+                       onChange={()=>onToggle(item.taskId)}/>
                 <span className="text-2xl">{item.taskTitle}</span>
                 <span className="text-2xl">{priorityLabel[item.taskPriority]}</span>
               </li>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import DatePicker from "react-datepicker";
+import { useAuth } from "../context/AuthContext";
 type Priority = "NONE"|"LOW"|"MEDIUM"|"HIGH";
 type Status = "NONE"|"DOING"|"DONE"|"SKIPPED"; 
 type Task = {
@@ -26,6 +27,7 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
     const [date,setDate] = useState<Date | null>(new Date());
     const [openPicker,setOpenPicker] = useState(false);
     const [memo,setmemo] = useState<string>();
+    const {token} = useAuth();
     const PRIORITY_LABELS: Record<Priority,string> = {
         NONE:"なし",
         LOW:"低",
@@ -49,7 +51,7 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
     const handleUpdate = async()=>{
         if(!selectedTaskId) return;
         try{
-            const token = localStorage.getItem("token");
+            if(!token) return;
             const response = await fetch(`http://localhost:8080/api/tasks/${selectedTaskId}`,{
                 method:"PUT",
                 headers:{

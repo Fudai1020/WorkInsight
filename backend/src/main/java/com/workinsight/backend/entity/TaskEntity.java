@@ -49,7 +49,7 @@ public class TaskEntity {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "task_status",nullable = false)
-    private TaskStatus taskStatus = TaskStatus.NONE;
+    private TaskStatus taskStatus = TaskStatus.TODO;
 
     @Column(name = "task_memo")
     private String taskMemo;

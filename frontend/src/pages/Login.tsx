@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { AiOutlineEye, AiOutlineEyeInvisible    } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
     const [userEmail,setUserEmail] = useState('');
     const [userPassword,setUserPassword] = useState('');
     const [error,setError]  = useState('');
     const [showPassword,setShowPassword] = useState(false);
+    const {login} = useAuth();
     const navigate = useNavigate();
 
     const handleLogin = async(e:React.FormEvent) =>{
@@ -36,7 +38,7 @@ const Login = () => {
                 return;
             }
                 alert("ログイン成功");
-                localStorage.setItem("token",data.token);
+                login(data.token);
                 if(data.firstLogin){
                     navigate("/profile",{state:{firstLogin:true}});
                 }else{

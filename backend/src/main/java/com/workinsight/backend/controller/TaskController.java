@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -44,6 +45,10 @@ public class TaskController {
                                     Principal principal,
                                      @RequestBody UpdateTaskRequest request) {
         return taskService.updateTask(taskId, principal.getName(), request);
+    }
+    @PatchMapping("/{taskId}/status")
+    public TaskResponse updateTaskStatus(@PathVariable Long taskId,Principal principal){
+        return taskService.updateTaskStatus(taskId, principal.getName());
     }
     
 }
