@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { useModal } from "../context/ModalContext";
 import { useDashboard } from "../context/DashboardContext";
+import { useAuth } from "../context/AuthContext";
 
 const TaskModal = () => {
     const {refreshDashboard} = useDashboard();
     const {closeModal} = useModal();
     const [priority,setPriority] = useState("NONE");
     const [open,setOpen] = useState(false);
+    const {token} = useAuth();
     const priorites = [
         {label:"未設定",value:"NONE"},
         {label:"低",value:"LOW"},
@@ -17,8 +19,8 @@ const TaskModal = () => {
     const [taskMemo,setTaskMemo] = useState("");
     const submitForm = async(e:React.FormEvent) =>{
         e.preventDefault();
-        const token = localStorage.getItem("token");
         try{
+            if(!token) return;
             const response = await fetch("http://localhost:8080/api/tasks",{
                 method:"post",
                 headers:{

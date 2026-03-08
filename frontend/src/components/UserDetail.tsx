@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useSettings, type WeekDay } from "../context/SettingContext";
+import { useAuth } from "../context/AuthContext";
 type Props = {
   firstLogin:boolean;
 }
@@ -12,6 +13,7 @@ const UserDetail = ({firstLogin}:Props) => {
   const [restEndTime,setRestEndTime] = useState("");
   const [timer,setTimer] = useState(0);
   const days:WeekDay[]=["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY"];
+  const {token} = useAuth();
   const DAY_LABEL : Record<WeekDay,string> = {
     MONDAY:'月',
     TUESDAY:'火',
@@ -33,12 +35,12 @@ const UserDetail = ({firstLogin}:Props) => {
       setRestStartTime(settings.restStartTime);
       setRestEndTime(settings.restEndTime);
       setTimer(settings.breakMinutes);
-      setSelectedDays(settings.settingWeek);
+      setSelectedDays(settings.settingWeek ?? []);
     }
   },[settings]);
   const updateSetting = async ()=>{
     try{
-      const token = localStorage.getItem("token");
+      if(!token) return;
       const response = await fetch("http://localhost:8080/api/settings",{
         method:"PUT",
         headers:{
@@ -127,7 +129,7 @@ const UserDetail = ({firstLogin}:Props) => {
                           if(selectedDays.includes(day)){
                             setSelectedDays(selectedDays.filter(d => d !== day));
                           }else{
-                            setSelectedDays([...selectedDays,day]);
+                            setSelectedDays(prev => [...prev,day]);
                           }
                         }}>{DAY_LABEL[day]}</button>
               ))}

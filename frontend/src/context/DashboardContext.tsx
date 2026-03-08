@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { useAuth } from "./AuthContext";
 type Schedule = any;
 type Task = any;
 type DashboardContextType = {
@@ -8,10 +9,11 @@ type DashboardContextType = {
 }
 export const DashboardContext = createContext<DashboardContextType | null>(null);
 export const DashboardProvider = ({children}:{children:ReactNode}) =>{
+    const {token} = useAuth();
     const [todayTasks,setTodayTasks] = useState([]);
     const [todaySchedules,setTodaySchedules] = useState([]);
     const refreshDashboard = async () => {
-        const token = localStorage.getItem("token")
+      try{
         const taskRes = await fetch("http://localhost:8080/api/tasks?filter=dashboard",{
           headers:{
             Authorization:`Bearer ${token}`
@@ -30,7 +32,10 @@ export const DashboardProvider = ({children}:{children:ReactNode}) =>{
           const scheduleData = await scheduleRes.json();
           setTodaySchedules(scheduleData);
         }
-      };
+      }catch (err){
+        console.error(err);
+      }
+    };
     return(
         <DashboardContext.Provider value={{todayTasks,todaySchedules,refreshDashboard}}>
             {children}

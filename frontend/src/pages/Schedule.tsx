@@ -5,13 +5,15 @@ import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useState } from "react";
 import { useModal } from "../context/ModalContext";
+import { useAuth } from "../context/AuthContext";
 const Schedule = () => {
   const [selectedDate,setSelectedDate] = useState(new Date);
   const {openModal} = useModal();
+  const {token} = useAuth();
   const [events,setEvents] = useState<any[]>([]);
   const fetchSchedule = async(start:string,end:string)=>{
     try{
-    const token = localStorage.getItem("token");
+      if(!token) return;
     const res = await fetch(`http://localhost:8080/api/schedules/period?start=${start}&end=${end}`,{
       headers:{
         Authorization:`Bearer ${token}`,

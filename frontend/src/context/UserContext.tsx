@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { useAuth } from "./AuthContext";
 type User = {
     userId:number;
     userName:string;
@@ -18,13 +19,9 @@ export const UserContext = createContext<UserType | null>(null);
 export const UserProvider = ({children}:Props) =>{
     const [userData,setUserData] = useState<User | null>(null);
     const [loading,setLoading] = useState(true);
+    const {token} = useAuth();
     const fetchUser = async () =>{
         try{
-            const token = localStorage.getItem("token");
-            if(!token){
-                setLoading(false);
-                return;
-            }
             const response = await fetch("http://localhost:8080/api/users",{
                 headers:{
                     Authorization:`Bearer ${token}`,
@@ -46,8 +43,10 @@ export const UserProvider = ({children}:Props) =>{
         setUserData(null);
     }
     useEffect(()=>{
-        fetchUser();
-    },[])
+        if(token){
+            fetchUser();
+        }
+    },[token]);
     return (
         <UserContext.Provider value={{userData,logout,loading,refreshUser:fetchUser}}>
             {children}

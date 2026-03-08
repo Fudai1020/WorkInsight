@@ -10,4 +10,5 @@ public interface TaskService {
     TaskResponse createTask(String userEmail,TaskFormRequest request);
     List<TaskResponse> getTasks(String userEmail,String filter);
     TaskResponse updateTask(Long taskId,String userEmail,UpdateTaskRequest request);
+    TaskResponse updateTaskStatus(Long taskId,String userEmail);
 }

@@ -55,7 +55,7 @@ public class TaskControllerTest {
     private TaskService taskService;
     @Test
     void タスクフォームの送信が成功する() throws Exception{
-        TaskResponse response = new TaskResponse(1L, "タスク", TaskPriority.MEDIUM, LocalDate.of(2026, 1, 30), "メモ",TaskStatus.NONE);
+        TaskResponse response = new TaskResponse(1L, "タスク", TaskPriority.MEDIUM, LocalDate.of(2026, 1, 30), "メモ",TaskStatus.TODO);
         when(taskService.createTask(anyString(), any(TaskFormRequest.class)))
             .thenReturn(response);
         mockMvc.perform(
