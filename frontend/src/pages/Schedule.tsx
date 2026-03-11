@@ -6,47 +6,44 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { useState } from "react";
 import { useModal } from "../context/ModalContext";
 import { useAuth } from "../context/AuthContext";
+import { fetchWithAuth } from "../utils/FetchWithAuth";
 const Schedule = () => {
   const [selectedDate,setSelectedDate] = useState(new Date);
   const {openModal} = useModal();
-  const {token} = useAuth();
+  const {token,logout} = useAuth();
   const [events,setEvents] = useState<any[]>([]);
   const fetchSchedule = async(start:string,end:string)=>{
     try{
       if(!token) return;
-    const res = await fetch(`http://localhost:8080/api/schedules/period?start=${start}&end=${end}`,{
-      headers:{
-        Authorization:`Bearer ${token}`,
-      }
-    });
-    const data = await res.json();
-    const formatted = data.map((s:any)=>{
-      let startDateTime;
-      let endDateTime;
-      if(s.allday){
+        const res = await fetchWithAuth(`/schedules/period?start=${start}&end=${end}`,token,logout);
+        const data = await res.json();
+        const formatted = data.map((s:any)=>{
+        let startDateTime;
+        let endDateTime;
+        if(s.allday){
+          return{
+            id:s.scheduleId,
+            title:s.scheduleTitle,
+            start:s.scheduleDate,
+            allDay:true,
+          }
+        }else{
+          startDateTime = `${s.scheduleDate}T${s.startTime}`;
+          endDateTime = `${s.scheduleDate}T${s.endTime}`;
+        }
         return{
           id:s.scheduleId,
           title:s.scheduleTitle,
-          start:s.scheduleDate,
-          allDay:true,
-        }
-      }else{
-        startDateTime = `${s.scheduleDate}T${s.startTime}`;
-        endDateTime = `${s.scheduleDate}T${s.endTime}`;
-      }
-      return{
-        id:s.scheduleId,
-        title:s.scheduleTitle,
-        start:startDateTime,
-        end:endDateTime,
-        allDay:s.allday,
-      };
-    });
-    setEvents(formatted);
-  }catch(err){
-    console.error(err);
+          start:startDateTime,
+          end:endDateTime,
+          allDay:s.allday,
+        };
+      });
+      setEvents(formatted);
+    }catch(err){
+      console.error(err);
+    }
   }
-}
 
 
   return (

@@ -2,13 +2,14 @@ import { useState } from "react"
 import { useModal } from "../context/ModalContext";
 import { useDashboard } from "../context/DashboardContext";
 import { useAuth } from "../context/AuthContext";
+import { fetchWithAuth } from "../utils/FetchWithAuth";
 
 const TaskModal = () => {
     const {refreshDashboard} = useDashboard();
     const {closeModal} = useModal();
     const [priority,setPriority] = useState("NONE");
     const [open,setOpen] = useState(false);
-    const {token} = useAuth();
+    const {token,logout} = useAuth();
     const priorites = [
         {label:"未設定",value:"NONE"},
         {label:"低",value:"LOW"},
@@ -21,12 +22,8 @@ const TaskModal = () => {
         e.preventDefault();
         try{
             if(!token) return;
-            const response = await fetch("http://localhost:8080/api/tasks",{
-                method:"post",
-                headers:{
-                    Authorization:`Bearer ${token}`,
-                    "Content-Type":"application/json"
-                },
+                await fetchWithAuth("/tasks",token,logout,{
+                method:"POST",
                 body:JSON.stringify({
                     taskTitle,
                     taskPriority:priority,
@@ -34,10 +31,8 @@ const TaskModal = () => {
                     taskMemo
                 })
             });
-            if(response.ok){
                 await refreshDashboard();
                 closeModal();
-            }
         }catch(err){
             throw new Error("送信に失敗しました");
         }

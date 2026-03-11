@@ -3,7 +3,8 @@ import { useDashboard } from "../context/DashboardContext"
 const LazyTodayData = () => {
     const {summary} = useDashboard();
     if(!summary){
-        return <div>読み込み中...</div>
+        return <div className="text-lg
+        text-center mt-5">読み込み中...</div>
     }
   return (
     <div className="flex flex-col items-center justify-center gap-13">

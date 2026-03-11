@@ -94,4 +94,13 @@ public class TaskServiceImpl implements TaskService{
         }
         return TaskResponse.from(task);
     }
+    @Override
+    public List<TaskResponse> getUpcomingTasks(String userEmail){
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        List<TaskEntity> tasks = 
+            taskRepository.findTop5ByUser_UserEmailAndTaskDeadlineGreaterThanEqualAndTaskStatusNotOrderByTaskDeadlineAsc(userEmail, tomorrow,TaskStatus.DONE);
+        return tasks.stream()
+            .map(TaskResponse::from)
+            .toList();
+    }
 }

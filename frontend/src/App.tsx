@@ -14,6 +14,7 @@ import { UserProvider } from './context/UserContext'
 import { SettingProvider } from './context/SettingContext'
 import { AuthProvider } from './context/AuthContext'
 import { TimerProvider } from './context/TimerContext'
+import PrivateRoute from './components/PrivateRoute'
 
 
 function App() {
@@ -28,7 +29,11 @@ function App() {
                 <Routes>
                   <Route path='/login' element={<Login />}></Route>
                   <Route path='/' element={<Register />}></Route>
-                    <Route element={<AppLayout/>}>
+                    <Route element={
+                      <PrivateRoute> 
+                          <AppLayout/>
+                      </PrivateRoute>
+                        }>
                       <Route path='/dashboard' element={<Dashboard />}/>
                       <Route path='/todoList' element={<TodoList/>}/>
                       <Route path='/schedule' element={<Schedule/>}/>

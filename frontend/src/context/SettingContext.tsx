@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useState, type ReactNode, } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode, } from "react";
 import { useAuth } from "./AuthContext";
+import { fetchWithAuth } from "../utils/FetchWithAuth";
 export const WEEK_DAYS = [
     "MONDAY",
     "TUESDAY",
@@ -30,16 +31,14 @@ export const SettingContext = createContext<SettingType | null>(null);
 export const SettingProvider = ({children}:Props) =>{
     const [settings,setSettings] = useState<Settings | null>(null);
     const [loading,setLoading] = useState(true);
-    const {token} = useAuth();
-    const fetchUserData = async() =>{
-        if(!token) return;
+    const {token , logout} = useAuth();
+    const fetchUserData = useCallback(async() =>{
+        if(!token) {
+            setLoading(false);
+            return;
+        }
         try{
-            const response = await fetch("http://localhost:8080/api/settings",{
-                headers:{
-                    Authorization:`Bearer ${token}`,
-                }
-            });
-            if(!response.ok) throw new Error('faild to fetch');
+            const response = await fetchWithAuth("/settings",token,logout);
             const data = await response.json();
             setSettings(data);
         }catch(err){
@@ -47,11 +46,9 @@ export const SettingProvider = ({children}:Props) =>{
         }finally{
             setLoading(false);
         }
-    };
+    },[token,logout]);
     useEffect(()=>{
-        if(token){
             fetchUserData();
-        }
     },[token]);
 
     return(
