@@ -75,7 +75,7 @@ const TaskList = ({tasks,onSelectedId,selectedTaskId,onToggleStatus}:props) => {
                                 <input type="checkbox"
                                         className="scale-125"
                                         checked={t.taskStatus === "DONE"}
-                                        onClick={(e)=>{
+                                        onChange={(e)=>{
                                             e.stopPropagation();
                                             onToggleStatus(t.taskId);
                                         }} />

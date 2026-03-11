@@ -11,4 +11,5 @@ public interface TaskService {
     List<TaskResponse> getTasks(String userEmail,String filter);
     TaskResponse updateTask(Long taskId,String userEmail,UpdateTaskRequest request);
     TaskResponse updateTaskStatus(Long taskId,String userEmail);
+    List<TaskResponse> getUpcomingTasks(String userEmail);
 }

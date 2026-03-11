@@ -1,31 +1,25 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useModal } from "../context/ModalContext"
+import { fetchWithAuth } from "../utils/FetchWithAuth";
 
 const FeedbackModal = () => {
     const {closeModal} = useModal();
-    const {token} = useAuth();
+    const {token,logout} = useAuth();
     const [workHour,setWorkHour] = useState(0);
     const [workMinutes,setWorkMinutes] = useState(0);
     const [feedbackContent,setFeedbackContent] = useState("");
     const saveFeedback = async(feedback:string | null) =>{
         if(!token) return false;
         try{
-            const response = await fetch("http://localhost:8080/api/feedbacks",{
+            await fetchWithAuth("/feedbacks",token,logout,{
                 method:"POST",
-                headers:{
-                    "Content-Type":"application/json",
-                    Authorization:`Bearer ${token}`
-                },
                 body:JSON.stringify({
                     workHour,
                     workMinutes,
                     feedbackContent:feedback,
                 })
             });
-            if(!response.ok){
-                throw new Error("failed to save feedback");
-            }
             return true;
         }catch(err){
             console.error(err);

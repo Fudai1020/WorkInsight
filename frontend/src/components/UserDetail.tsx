@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useSettings, type WeekDay } from "../context/SettingContext";
 import { useAuth } from "../context/AuthContext";
+import { fetchWithAuth } from "../utils/FetchWithAuth";
 type Props = {
   firstLogin:boolean;
 }
@@ -13,7 +14,7 @@ const UserDetail = ({firstLogin}:Props) => {
   const [restEndTime,setRestEndTime] = useState("");
   const [timer,setTimer] = useState(0);
   const days:WeekDay[]=["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY"];
-  const {token} = useAuth();
+  const {token,logout} = useAuth();
   const DAY_LABEL : Record<WeekDay,string> = {
     MONDAY:'月',
     TUESDAY:'火',
@@ -41,12 +42,8 @@ const UserDetail = ({firstLogin}:Props) => {
   const updateSetting = async ()=>{
     try{
       if(!token) return;
-      const response = await fetch("http://localhost:8080/api/settings",{
+        await fetchWithAuth("/settings",token,logout,{
         method:"PUT",
-        headers:{
-          Authorization:`Bearer ${token}`,
-          "Content-Type":"application/json",
-        },
         body:JSON.stringify({
           workStartTime:startTime,
           workEndTime:endTime,
@@ -56,11 +53,6 @@ const UserDetail = ({firstLogin}:Props) => {
           settingWeek:selectedDays
         })
       });
-      if(!response.ok){
-        const text = await response.text();
-        console.log(text);
-        throw new Error("failed to fetch");
-      }
       await refreshSetting();
       setEditMode(false);
     }catch(err){

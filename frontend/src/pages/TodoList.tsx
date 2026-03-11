@@ -2,8 +2,9 @@ import { useEffect, useState } from "react"
 import TaskDetails from "../components/TaskDetails"
 import TaskList from "../components/TaskList"
 import { useAuth } from "../context/AuthContext";
+import { fetchWithAuth } from "../utils/FetchWithAuth";
 type Priority = "NONE"|"LOW"|"MEDIUM"|"HIGH";
-type Status = "NONE"|"DOING"|"DONE"|"SKIPPED"; 
+type Status = "TODO"|"DOING"|"DONE"|"SKIPPED"; 
 export type Task = {
     taskId:number;
     taskTitle:string;
@@ -15,19 +16,14 @@ export type Task = {
 const TodoList = () => {
     const [tasks,setTasks] = useState<Task[]>([]);
     const [selectedId,setSelectedId] = useState<number|null>(null);
-    const {token} = useAuth();
+    const {token,logout} = useAuth();
     //タスクデータ取得処理
     const fetchTodoList = async()=>{
+        if(!token) return;
         try{
-            const response = await fetch("http://localhost:8080/api/tasks",{
-                headers:{
-                    Authorization:`Bearer ${token}`
-                }
-            });
-            if(response.ok){
-                const taskData = await response.json();
-                setTasks(taskData);
-            }
+            const response = await fetchWithAuth("/api/tasks",token,logout);
+            const taskData = await response.json();
+            setTasks(taskData);
         }catch(err){
             throw new Error("データの取得に失敗しました");
         }
@@ -43,21 +39,16 @@ const TodoList = () => {
         setTasks(prev =>
             prev.map(task =>
                 task.taskId === taskId ? {
-                    ...task,status:task.taskStatus === "DONE" ? "TODO" :"DONE"
+                    ...task,taskStatus:task.taskStatus === "DONE" ? "TODO" :"DONE"
                 }
                 :task
             )
         );
         try{
-            const res = await fetch(`http://localhost:8080/api/tasks/${taskId}/status`,{
-                method:"PATCH",
-                headers:{
-                    Authorization:`Bearer ${token}`
-                },
+            await fetchWithAuth(`/tasks/${taskId}/status`,token,logout,{
+                method:"PATCH"
             });
-            if(res.ok){
-                fetchTodoList();
-            }
+            await fetchTodoList();
         }catch(err){
             console.error(err);
         }

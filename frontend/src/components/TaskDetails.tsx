@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import DatePicker from "react-datepicker";
 import { useAuth } from "../context/AuthContext";
+import { fetchWithAuth } from "../utils/FetchWithAuth";
 type Priority = "NONE"|"LOW"|"MEDIUM"|"HIGH";
-type Status = "NONE"|"DOING"|"DONE"|"SKIPPED"; 
+type Status = "TODO"|"DOING"|"DONE"|"SKIPPED"; 
 type Task = {
     taskId:number;
     taskTitle:string;
@@ -27,7 +28,7 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
     const [date,setDate] = useState<Date | null>(new Date());
     const [openPicker,setOpenPicker] = useState(false);
     const [memo,setmemo] = useState<string>();
-    const {token} = useAuth();
+    const {token,logout} = useAuth();
     const PRIORITY_LABELS: Record<Priority,string> = {
         NONE:"なし",
         LOW:"低",
@@ -35,7 +36,7 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
         HIGH:"高"
     };
     const STATUS_LABELS: Record<Status,string> ={
-        NONE:"未着手",
+        TODO:"未着手",
         DOING:"進行中",
         DONE:"完了",
         SKIPPED:"後で"
@@ -52,12 +53,8 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
         if(!selectedTaskId) return;
         try{
             if(!token) return;
-            const response = await fetch(`http://localhost:8080/api/tasks/${selectedTaskId}`,{
+                await fetchWithAuth(`/tasks/${selectedTaskId}`,token,logout,{
                 method:"PUT",
-                headers:{
-                    "Content-Type":"application/json",
-                    "Authorization":`Bearer ${token}`
-                },
                 body:JSON.stringify({
                     taskPriority:priority,
                     taskStatus:state,
@@ -65,13 +62,7 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
                     taskMemo:memo
                 })
             });
-            if(!response.ok){
-                const errorText = await response.text();
-                console.log(errorText);
-                throw new Error("更新失敗");
-            }else{
-                refreshTasks();
-            }
+            await refreshTasks();
         }catch(err){
             console.error(err);
         }

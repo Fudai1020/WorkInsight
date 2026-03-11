@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useAuth } from "../context/AuthContext";
+import { fetchWithAuth } from "../utils/FetchWithAuth";
 
 const UserProfile = () => {
     const {userData,loading,refreshUser} = useUser();
@@ -8,7 +9,7 @@ const UserProfile = () => {
     const [userEmail,setUserEmail] = useState('');
     const [userMemo,setUserMemo] = useState('');
     const [editMode,setEditMode] = useState(false);
-    const {token} = useAuth();
+    const {token,logout} = useAuth();
     useEffect(()=>{
         if(userData){
             setUserName(userData.userName ?? "");
@@ -19,23 +20,14 @@ const UserProfile = () => {
     const updateUser = async()=>{
         try{
             if(!token) return;
-            const response = await fetch("http://localhost:8080/api/users",{
+                await fetchWithAuth("/users",token,logout,{
                 method:"PUT",
-                headers:{
-                    Authorization:`Bearer ${token}`,
-                    "Content-Type":"application/json"
-                },
                 body:JSON.stringify({
                     userName,
                     userEmail,
                     userMemo
                 })
             });
-            if(!response.ok){
-                const text = await response.text();
-                console.log(text);
-                throw new Error("failed to fetch");
-            }
             await refreshUser();
             setEditMode(false);            
         }catch(err){

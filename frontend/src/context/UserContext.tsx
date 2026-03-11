@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { useAuth } from "./AuthContext";
+import { fetchWithAuth } from "../utils/FetchWithAuth";
 type User = {
     userId:number;
     userName:string;
@@ -12,25 +13,20 @@ type Props ={
 type UserType = {
     userData:User | null;
     loading:boolean;
-    logout:()=>void;
     refreshUser:()=>Promise<void>;
 }
 export const UserContext = createContext<UserType | null>(null);
 export const UserProvider = ({children}:Props) =>{
     const [userData,setUserData] = useState<User | null>(null);
     const [loading,setLoading] = useState(true);
-    const {token} = useAuth();
-    const fetchUser = async () =>{
-        if(!token) return;
+    const {token,logout} = useAuth();
+    const fetchUser = useCallback(async () =>{
+        if(!token) {
+            setLoading(false);
+            return;
+        }
         try{
-            const response = await fetch("http://localhost:8080/api/users",{
-                headers:{
-                    Authorization:`Bearer ${token}`,
-                },
-            });
-            if(!response.ok){
-                throw new Error("Failed to fetch user");    
-            }
+            const response = await fetchWithAuth("/users",token,logout);
             const data = await response.json();
             setUserData(data);
         }catch(err){
@@ -38,18 +34,12 @@ export const UserProvider = ({children}:Props) =>{
         }finally{
             setLoading(false);
         }
-    };
-    const logout = ()=>{
-        localStorage.removeItem("token");
-        setUserData(null);
-    }
+    },[token,logout]);
     useEffect(()=>{
-        if(token){
             fetchUser();
-        }
-    },[token]);
+    },[fetchUser]);
     return (
-        <UserContext.Provider value={{userData,logout,loading,refreshUser:fetchUser}}>
+        <UserContext.Provider value={{userData,loading,refreshUser:fetchUser}}>
             {children}
         </UserContext.Provider>
     )

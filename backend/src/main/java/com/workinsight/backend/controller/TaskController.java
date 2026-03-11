@@ -50,5 +50,9 @@ public class TaskController {
     public TaskResponse updateTaskStatus(@PathVariable Long taskId,Principal principal){
         return taskService.updateTaskStatus(taskId, principal.getName());
     }
+    @GetMapping("/tomorrow")
+    public ResponseEntity<List<TaskResponse>> getUpcomingTasks(Principal principal) {
+        return ResponseEntity.ok(taskService.getUpcomingTasks(principal.getName()));
+    }
     
 }
