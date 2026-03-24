@@ -25,8 +25,8 @@ const LazyNextData = () => {
     fetchComingData();
   },[token]);
   return (
-    <div className="flex flex-col items-center gap-5">
-      <h1 className="text-2xl mt-5">期限の近いタスク</h1>
+    <div className="flex flex-col items-center gap-5 pb-3">
+      <h1 className="text-xl sm:text-2xl mt-5">期限の近いタスク</h1>
       {tomorrowData.length === 0 ? (
         <p>明日期限のタスクはありません</p>
       ):(

@@ -69,12 +69,12 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
     }
   return (
     <div className="flex flex-col items-center gap-5 h-full">
-        <h1 className="text-4xl text-center mt-10 ">{selectedTask?.taskTitle ?? "タスクを選択してください"}</h1>
-        <div className="flex flex-col items-center gap-10 cursor-pointer select-none h-full">
+        <h1 className="text-xl sm:text-4xl text-center mt-10 ">{selectedTask?.taskTitle ?? "タスクを選択してください"}</h1>
+        <div className="flex flex-col items-center gap-5 sm:gap-10 cursor-pointer select-none h-full">
             <div className="flex items-center gap-5 hover:opacity-70 mt-6 relative"
                 onClick={()=>setOpen(!open)}>
-                <span className="text-3xl">優先度:</span>
-                <span className="font-semibold text-3xl">{priority? PRIORITY_LABELS[priority] : ""}</span>
+                <span className="text-2xl sm:text-3xl">優先度:</span>
+                <span className="font-semibold text-2xl sm:text-3xl">{priority? PRIORITY_LABELS[priority] : ""}</span>
                 <span className="text-2xl">▼</span>
             {open && (
                 <ul className="absolute top-full right-0 mt-1 bg-white shadow-md rounded-md w-24 z-20">
@@ -92,8 +92,8 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
             </div>
             <div className=" flex items-center gap-5 hover:opacity-70  relative"
                 onClick={()=>setStateOpen(!stateOpen)}>
-                <span className="text-3xl">状態:</span>
-                <span className="font-semibold text-3xl">{state ? STATUS_LABELS[state] :""}</span>
+                <span className="text-2xl sm:text-3xl">状態:</span>
+                <span className="font-semibold text-2xl sm:text-3xl">{state ? STATUS_LABELS[state] :""}</span>
                 <span className="text-2xl">▼</span>
             {stateOpen && (
                 <ul className="absolute right-0 bg-white shadow-md top-full rounded-md w-24 ">
@@ -109,9 +109,9 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
                 </ul>
             )}
             </div>
-            <div className="flex gap-1 translate-x-10 relative">
-                <span className="text-3xl">期限：</span>
-                <span className="text-3xl font-semibold">{date? date.toISOString().split("T")[0]:"期限なし"}</span>
+            <div className="flex gap-1 flex-col sm:flex-row relative">
+                <span className="text-2xl sm:text-3xl">期限：</span>
+                <span className="text-2xl sm:text-3xl font-semibold">{date? date.toISOString().split("T")[0]:"期限なし"}</span>
                 <button className="text-blue-600 hover:underline text-base translate-x-10"
                         onClick={()=>setOpenPicker(!openPicker)}>日付を変更
                 </button>
@@ -129,15 +129,15 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
             )}
             </div>
             <div className="flex flex-col items-center gap-5">
-                <label htmlFor="memo" className="text-3xl">メモ</label>
+                <label htmlFor="memo" className="text-2xl sm:text-3xl">メモ</label>
                 <textarea id="memo" name="memo"
-                         className="bg-white shadow-md rounded w-150 p-5 h-50 max-w-lg 
+                         className="bg-white shadow-md rounded w-full sm:p-5 h-50 max-w-lg 
                                     hover:scale-[1.02] transition-transform"
                         value={memo}
                         onChange={(e) => setmemo(e.target.value)}>
                 </textarea>
             </div>
-            <div className="flex gap-30 mb-15">
+            <div className="flex gap-10 sm:gap-30 mb-10 w-full max-w-md">
                 <button className="text-xl bg-[#D9D9D9] p-4 rounded-lg shadow-md hover:scale-[1.05] transiton-transform">削除</button>
                 <button className="text-xl bg-[#D9D9D9] p-4 rounded-lg shadow-md hover:scale-[1.05] transiton-transform"
                         onClick={handleUpdate}>更新</button>

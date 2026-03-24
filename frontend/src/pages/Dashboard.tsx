@@ -28,8 +28,8 @@ const Dashboard = () => {
     },[token,refreshDashboard]);
   return (
     <div className="flex flex-col gap-8 h-full">
-        <span className="text-center text-4xl mt-5">{formatDate}</span>
-        <div className="flex gap-10 justify-center h-full">
+        <span className="text-center text-3xl sm:text-4xl font-bold mt-5">{formatDate}</span>
+        <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 justify-center h-full">
             <TaskPreview tasks={todayTasks} onToggle={handleToggle}/>
             <SchedulePreview schedules={todaySchedules}/>
         </div>

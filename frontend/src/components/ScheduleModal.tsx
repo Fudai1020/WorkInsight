@@ -43,27 +43,27 @@ const ScheduleModal = () => {
   }
   return (
     <form onSubmit={submitForm}
-          className="flex flex-col h-full gap-13">
-        <h1 className="text-3xl font-semibold justify-center flex items-center mt-4">新しい予定</h1>
-        <div className="grid grid-cols-[auto_1fr] px-[14%] items-center">
-        <span className="text-3xl text-right">題名</span>
+          className="flex flex-col h-full gap-4 sm:gap-13">
+        <h1 className="text-2xl sm:text-3xl font-semibold justify-center flex items-center mt-4">新しい予定</h1>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[auto_1fr] px-10 items-center">
+        <span className="text-2xl text-center sm:text-3xl sm:text-right">題名</span>
             <input type="text"
                    value={scheduleTitle} 
                    onChange={(e)=>setScheduleTitle(e.target.value)}
-                   className="bg-[#D9D9D9] rounded h-[40px] text-black focus:outline mx-auto w-[14vw]
+                   className="bg-[#D9D9D9] rounded h-[40px] text-black focus:outline mx-auto w-full max-w-md
                                p-4 text-xl shadow-md hover:scale-[1.05] transition-transform"/>
         </div>
-        <div className="grid grid-cols-[auto_1fr] px-[14%] items-center">
-        <span className="text-3xl text-right">日付</span>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[auto_1fr] px-10 items-center">
+        <span className="text-2xl text-center sm:text-3xl sm:text-right">日付</span>
             <input type="date"
                    value={scheduleDate}
                    onChange={(e)=> setScheduleDate(e.target.value)} 
-                    className="bg-[#D9D9D9] rounded h-[40px] text-black focus:outline mx-auto w-[14vw]
+                    className="bg-[#D9D9D9] rounded h-[40px] text-black focus:outline mx-auto w-full max-w-md
                                p-4 text-xl shadow-md hover:scale-[1.05] transition-transform"/>
         </div>
-        <div className="grid grid-cols-[auto_1fr_auto] px-[14%] items-center">
-          <span className="text-3xl text-right">時間</span>
-          <div className="flex items-center gap-2 mx-auto translate-x-10">
+        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr_auto] px-10 gap-2 items-center">
+          <span className="text-2xl text-center sm:text-3xl sm:text-right">時間</span>
+          <div className="flex items-center gap-2 mx-auto ">
             <input type="time" step="1800" disabled={allDay} 
                    value={startTime}
                    onChange={(e)=>setStartTime(e.target.value)}
@@ -74,29 +74,29 @@ const ScheduleModal = () => {
                    onChange={(e)=>setEndTime(e.target.value)}
                    className="input bg-[#D9D9D9] p-3 rounded-md text-lg font-semibold hover:scale-[1.05]"/>
           </div>
-          <label className="flex items-center gap-2 ml-4 text-xl cursor-pointer">
+          <label className="flex justify-center items-center gap-2 text-xl cursor-pointer">
             <input type="checkbox" className="size-4"
                     checked={allDay}
                     onChange={(e) => setAllDay(e.target.checked)}/>
             終日
           </label>
         </div>
-         <div className="grid grid-cols-[auto_1fr] px-[14%] pt-3 items-start">
-            <span className="text-3xl text-right">メモ</span>
-            <textarea className="mx-auto bg-[#D9D9D9] rounded w-[14vw] h-[120px] 
+         <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] px-10 items-start">
+            <span className="text-2xl text-center sm:text-3xl sm:text-right">メモ</span>
+            <textarea className="mx-auto bg-[#D9D9D9] rounded w-full max-w-md h-[120px] 
                       hover:scale-[1.05] transition-transform p-3"
                       value={scheduleMemo}
                       onChange={(e)=>setScheduleMemo(e.target.value)}></textarea>
         </div>
-        <div className="flex items-center justify-center gap-25 mt-auto pb-15">
+        <div className="flex items-center justify-center gap-10 sm:gap-25 mt-auto pb-10">
             <button type="button"
                     onClick={closeModal} 
-                    className="bg-[#D9D9D9] p-4 rounded-md font-semibold 
+                    className="bg-[#D9D9D9] p-3 sm:p-4 rounded-md font-semibold 
                                hover:scale-[1.05] transition-transform">
                     キャンセル
             </button>
             <button type="submit" 
-                    className="bg-[#D9D9D9] p-4 rounded-md font-semibold 
+                    className="bg-[#D9D9D9] p-3 sm:p-4 rounded-md font-semibold 
                               hover:scale-[1.05] transition-transform">
                     追加
             </button>
