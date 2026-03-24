@@ -81,10 +81,10 @@ const Timer = () => {
     }
   return (
     <div>
-        <div className="flex flex-col items-center gap-10">
-            <h1 className="text-3xl">タイマー</h1>
+        <div className="flex flex-col items-center gap-5 sm:gap-10">
+            <h1 className="text-2xl sm:text-3xl font-semibold">タイマー</h1>
             <span className="text-3xl  font-mono">{formatTime(seconds)}</span>
-            <div className="flex gap-20">
+            <div className="flex gap-10 sm:gap-20">
             <button onClick={()=>setSeconds(initialSecond)} className="text-base bg-[#D9D9D9] p-3 rounded-lg">リセット</button>
             <button onClick={()=>setIsRunning(prev => !prev)}
                     className={`text-base ${isRunning ? "bg-[#48494B]" : "bg-[#FF9500]"} text-white p-3 rounded-lg`}>

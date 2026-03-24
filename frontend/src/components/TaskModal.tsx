@@ -39,20 +39,20 @@ const TaskModal = () => {
     }
   return (
     <form onSubmit={submitForm}
-            className="flex flex-col h-full gap-12">
-        <h1 className="text-3xl flex justify-center items-center font-semibold mt-10">タスクの追加</h1>
-        <div className="grid grid-cols-[auto_1fr] px-[14%] items-center">
-        <span className="text-3xl text-right">題名</span>
+            className="flex flex-col h-full gap-4 sm:gap-12">
+        <h1 className="text-2xl sm:text-3xl flex justify-center items-center font-semibold mt-5">タスクの追加</h1>
+        <div className="grid gap-2 sm:gap-8  grid-cols-1 sm:grid-cols-[auto_1fr] px-[14%] items-center">
+        <span className="text-2xl sm:text-3xl text-center sm:text-right">題名</span>
             <input type="text"
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)} 
-                    className="bg-[#D9D9D9] rounded h-[40px] text-black focus:outline mx-auto w-[14vw]
+                    className="bg-[#D9D9D9] rounded h-[40px] text-black focus:outline mx-auto w-full max-w-md
                                p-4 text-xl shadow-md hover:scale-[1.05] transition-transform"/>
         </div>
-        <div className="grid grid-cols-[auto_1fr] px-[14%] items-center relative">
-            <span className="text-3xl text-right">優先度</span>
-            <div className="mx-auto flex items-center gap-10">
-            <span className="text-3xl font-semibold">{priorites.find(p=>p.value === priority)?.label}</span>
+        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] px-[14%] gap-4 items-center relative">
+            <span className="text-2xl sm:text-3xl text-center sm:text-right">優先度</span>
+            <div className="mx-auto flex items-center justify-center gap-2 sm:gap-10">
+            <span className="text-2xl sm:text-3xl font-semibold">{priorites.find(p=>p.value === priority)?.label}</span>
             <span className="text-3xl" onClick={()=> setOpen(!open)}>▼</span>
             </div>
             {open && (
@@ -69,26 +69,26 @@ const TaskModal = () => {
                 </ul>
             )}
         </div>
-        <div className="grid grid-cols-[auto_1fr] px-[14%] items-center">
-            <span className="text-3xl text-right">期限</span>
+        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] px-[14%] gap-2 items-center">
+            <span className="text-2xl sm:text-3xl text-center sm:text-right">期限</span>
             <input type="date" 
                    value={deadline}
                    onChange={(e)=>setDeadline(e.target.value)}
-                   className="bg-[#D9D9D9] rounded h-[40px] w-[14vw] mx-auto text-center
+                   className="bg-[#D9D9D9] rounded h-[40px] w-full max-w-md mx-auto text-center
                                     p-4 text-xl shadow-md hover:scale-[1.05] transition-transform"/>
         </div>
-        <div className="grid grid-cols-[auto_1fr] px-[14%] pt-3 items-start">
-            <span className="text-3xl text-right">メモ</span>
-            <textarea className="mx-auto bg-[#D9D9D9] rounded w-[14vw] 
+        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] px-[14%] gap-2 pt-3 items-start">
+            <span className="text-2xl text-center sm:text-right">メモ</span>
+            <textarea className="mx-auto bg-[#D9D9D9] rounded w-full max-w-md 
                                  h-[120px] hover:scale-[1.05] transition-transform p-3"
                       value={taskMemo}
                       onChange={(e)=>setTaskMemo(e.target.value)}>
 
             </textarea>
         </div>
-        <div className="flex items-center justify-center gap-25 mt-auto pb-15">
-            <button type="button" onClick={()=>closeModal()} className="bg-[#D9D9D9] p-4 rounded-md font-semibold hover:scale-[1.05] transition-transform">キャンセル</button>
-            <button type="submit" className="bg-[#D9D9D9] p-4 rounded-md font-semibold hover:scale-[1.05] transition-transform">追加</button>
+        <div className="flex items-center justify-center gap-10 sm:gap-25 mt-auto pb-10">
+            <button type="button" onClick={()=>closeModal()} className="bg-[#D9D9D9] p-3 sm:p-4 rounded-md font-semibold hover:scale-[1.05] transition-transform text-sm sm:text-base">キャンセル</button>
+            <button type="submit" className="bg-[#D9D9D9] p-3 sm:p-4 rounded-md font-semibold hover:scale-[1.05] transition-transform text-sm sm:text-base">追加</button>
         </div>
     </form>
   )

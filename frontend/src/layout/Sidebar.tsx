@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AiOutlineHome } from "react-icons/ai";
 import { BsLayoutSidebar } from "react-icons/bs";
 import { CiUser } from "react-icons/ci";
@@ -9,13 +9,25 @@ import { useModal } from "../context/ModalContext";
 import { useUser } from "../context/UserContext";
 
 const Sidebar = () => {
-    const [isOpen,setIsOpen] = useState(true);
+    const [isOpen,setIsOpen] = useState(window.innerWidth >= 640);
     const {closeModal} = useModal();
     const {userData} = useUser();
+    useEffect(()=>{
+        const handleResize = () =>{
+            if(window.innerWidth < 640){
+                setIsOpen(false);
+            }else{
+                setIsOpen(true);
+            }
+        };
+        handleResize();
+        window.addEventListener("resize",handleResize);
+        return () => window.removeEventListener("resize",handleResize);
+    },[])
   return (
-    <div className={`${isOpen ? "w-[250px]":"w-[90px]"} shadow-[4px_0_8px_rgba(0,0,0,0.05)] flex flex-col
+    <div className={`${isOpen ? "w-[250px]":"w-[80px] sm:w-[90px]"} shadow-[4px_0_8px_rgba(0,0,0,0.05)] flex flex-col
                     bg-[#F5F5F5] h-screen p-4 transition-all duration-300 border-r border-gray-200`}>
-        <div className="flex justify-end mt-2">
+        <div className="hidden sm:flex justify-end mt-2">
             <button onClick={()=>setIsOpen(!isOpen)} className="p-2 rounded-lg hover:bg-gray-200 hover:scale-[1.05] transition-colors">
             <BsLayoutSidebar size={20} />
             </button>

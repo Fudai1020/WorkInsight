@@ -49,22 +49,24 @@ const Register = () => {
   }
   return (
     <>
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="border rounded-xl shadow-md bg-[#F5F5F5] w-[480px] h-[550px]">
-        <h1 className="text-center text-3xl mt-6 font-bold">新規登録</h1>
+    <div className="flex min-h-screen items-center justify-center px-4 py-6 sm:p-6">
+      <div className="w-full border rounded-xl shadow-md bg-[#F5F5F5] max-w-[480px]  px-5 py-6 sm:px-8 sm:py-8">
+        <h1 className="text-center text-2xl mt-6 font-bold sm:text-3xl">新規登録</h1>
           {error &&(
-            <p className="text-red-600 text-center mt-5">{error}</p>
+            <p className="text-red-600 text-center mt-5 font-bold text-sm sm:text-base">{error}</p>
           )}
-        <form onSubmit={handleRegister} className="flex flex-col items-center gap-1 mt-6">
-          <label className="text-2xl">メールアドレス</label>
-          <input type="email" 
-                  className="w-[380px] h-[50px] shadow-md bg-[#D5D5D5] rounded pl-5 text-lg
-                              hover:scale-[1.05] transition-transform focus:scale-[1.05]" 
-                  value={userEmail} onChange={(e)=>setUserEmail(e.target.value)}/>
-          <label className="text-2xl mt-3">パスワード</label>
-          <div className="relative w-[380px]">
+        <form onSubmit={handleRegister} className="flex flex-col items-center gap-1 mt-6 sm:mt-8">
+          <label className="text-xl sm:text-2xl">メールアドレス</label>
+          <div className="relative w-full px-2">
+            <input type="email" 
+                    className="w-full h-[50px] shadow-md bg-[#D5D5D5] rounded text-base pl-5
+                                hover:scale-[1.05] transition-transform focus:scale-[1.05] sm:text-lg" 
+                    value={userEmail} onChange={(e)=>setUserEmail(e.target.value)}/>
+          </div>
+          <label className="text-xl sm:text-2xl mt-3">パスワード</label>
+          <div className="relative w-full px-2">
             <input type={showPassword ? "text":"password"}
-                    className="w-[380px] h-[50px] shadow-md bg-[#D5D5D5] rounded pl-5 text-lg
+                    className="w-full h-[50px] shadow-md bg-[#D5D5D5] rounded pl-5 text-base sm:text-xl
                               hover:scale-[1.05] transition-transform focus:scale-[1.05]" 
                    value={userPassword} onChange={(e)=>setUserPassword(e.target.value)}/>
             <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:scale-[1.3] transition-transform"
@@ -72,21 +74,21 @@ const Register = () => {
               {showPassword ? <AiOutlineEyeInvisible size={22}/>:<AiOutlineEye size={22}/>}
             </div>
           </div>  
-          <label className="text-2xl mt-3">パスワード(確認)</label>
-          <div className="relative w-[380px]">
+          <label className="text-xl sm:text-2xl mt-3">パスワード(確認)</label>
+          <div className="relative w-full px-2">
             <input type={showPassword ? "text":"password"}
-                    className="w-[380px] h-[50px] shadow-md bg-[#D5D5D5] rounded pl-5 text-lg
+                    className="w-full h-[50px] shadow-md bg-[#D5D5D5] rounded pl-5 text-base sm:text-lg
                               hover:scale-[1.05] transition-transform focus:scale-[1.05]" 
                     value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}/>
             <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:scale-[1.3] transition-transform" onClick={()=>setShowPassword(!showPassword)}>
               {showPassword ? <AiOutlineEyeInvisible size={22}/>:<AiOutlineEye size={22}/>}
             </div>
           </div>
-          <p className="flex gap-10 mt-5">登録済み  
+          <p className="flex flex-wrap justify-center sm:gap-6 gap-2 mt-5 text-sm sm:text-base">登録済み  
                     <Link to='/login' className="text-blue-700 hover:scale-[1.02] ">ログイン</Link>
           </p>
           <button type="submit"
-                  className="bg-[#D5D5D5] w-[200px] h-[48px]
+                  className="bg-[#D5D5D5] w-full max-w-[200px] h-[48px]
                              rounded mt-3  shadow-md hover:scale-[1.05] transition-transform" >
             登録
           </button>

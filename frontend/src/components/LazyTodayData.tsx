@@ -7,13 +7,13 @@ const LazyTodayData = () => {
         text-center mt-5">読み込み中...</div>
     }
   return (
-    <div className="flex flex-col items-center justify-center gap-13">
-        <h1 className="text-2xl font-semibold mt-10">今日の状況</h1>
-        <div className="flex justify-between text-xl">
+    <div className="flex flex-col items-center justify-center gap-5 sm:gap-10 pb-5">
+        <h1 className="text-xl sm:text-2xl font-semibold mt-5 sm:gap-10">今日の状況</h1>
+        <div className="flex justify-between text-base sm:text-xl">
             <span>稼働時間：</span>
             <span>{summary.workMinutes}分</span>
         </div>
-        <div className="flex justify-between text-xl">
+        <div className="flex justify-between text-base sm:text-xl">
             <span>サボり時間：</span>
             <span>{summary.saboriMinutes}分</span>
         </div>

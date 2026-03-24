@@ -21,10 +21,10 @@ const TaskList = ({tasks,onSelectedId,selectedTaskId,onToggleStatus}:props) => {
   return (
     <div className="flex flex-col h-full gap-3">
         <div className="flex-1 overflow-y-auto  p-3 ">
-            <span className="text-3xl">期限なし</span>
+            <span className="text-2xl sm:text-3xl text-center sm:text-left block">期限なし</span>
             <ul className="my-2 pl-5 flex flex-col gap-5">
                 {tasks.filter(t => t.taskStatus !== 'DONE' && !t.taskDeadline).map(t=>(
-                    <li key={t.taskId} className="text-xl border-b pb-2 "
+                    <li key={t.taskId} className="text-base sm:text-xl border-b pb-2 "
                         onClick={()=>onSelectedId(t.taskId)}>
                         <div className={`flex gap-3 p-2 rounded-md ${selectedTaskId === t.taskId ? "bg-gray-200":"hover:bg-gray-200"}`}>
                             <input type="checkbox" 
@@ -39,12 +39,12 @@ const TaskList = ({tasks,onSelectedId,selectedTaskId,onToggleStatus}:props) => {
                     </li>
                 ))}
             </ul>
-            <span className="text-3xl">期限あり</span>
+            <span className="text-2xl sm:text-3xl text-center sm:text-left block">期限あり</span>
             <ul className="my-2 pl-5 flex flex-col gap-5">
                 {tasks.filter(t=>t.taskStatus !== "DONE" && t.taskDeadline).map(t=>{
                     const overdue = isOverdue(t.taskDeadline);
                     return(
-                <li key={t.taskId} className="text-xl border-b pb-2"
+                <li key={t.taskId} className="text-base sm:text-xl border-b pb-2"
                     onClick={()=>onSelectedId(t.taskId)}>
                     <div className={`flex gap-3 p-2 rounded-md ${selectedTaskId === t.taskId ? "bg-gray-200":"hover:bg-gray-200"}`}>
                         <input type="checkbox"
@@ -60,7 +60,7 @@ const TaskList = ({tasks,onSelectedId,selectedTaskId,onToggleStatus}:props) => {
                 </li>
                 )})}
             </ul>
-            <div className="flex items-center gap-2 text-3xl cursor-pointer selece-none"
+            <div className="flex items-center justify-center sm:justify-start gap-2 text-2xl sm:text-3xl cursor-pointer selecet-none"
                  onClick={()=>setIsOpen(prev => !prev)}>
                 <span>完了済み</span>
                 <span className={`transition-transform duration-300 ${isOpen ? "rotate-180":"rotate-0"}`}>▼</span>
@@ -69,7 +69,7 @@ const TaskList = ({tasks,onSelectedId,selectedTaskId,onToggleStatus}:props) => {
                 <ul className="my-2 pl-5 flex flex-col gap-5">
                     {tasks.filter(t => t.taskStatus === 'DONE')
                     .map(t=>(
-                        <li key={t.taskId} className="text-xl border-b pb-3"
+                        <li key={t.taskId} className="text-base sm:text-xl border-b pb-3"
                             onClick={()=>onSelectedId(t.taskId)}>
                             <div className={`flex gap-3 p-2 rounded-md ${selectedTaskId === t.taskId ? "bg-gray-200":"hover:bg-gray-200"}`}>
                                 <input type="checkbox"
@@ -87,7 +87,7 @@ const TaskList = ({tasks,onSelectedId,selectedTaskId,onToggleStatus}:props) => {
             )}
         </div>
 
-        <div className=" text-xl mt-auto pb-6 text-center underline hover:scale-[1.02] cursor-pointer"
+        <div className=" text-base sm:text-xl mt-auto pb-6 text-center underline hover:scale-[1.02] cursor-pointer"
             onClick={() => openModal("task",{data:tasks})}>+タスクを追加する
         </div>
     </div>

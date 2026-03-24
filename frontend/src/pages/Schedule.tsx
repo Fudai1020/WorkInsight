@@ -3,7 +3,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useModal } from "../context/ModalContext";
 import { useAuth } from "../context/AuthContext";
 import { fetchWithAuth } from "../utils/FetchWithAuth";
@@ -12,6 +12,15 @@ const Schedule = () => {
   const {openModal} = useModal();
   const {token,logout} = useAuth();
   const [events,setEvents] = useState<any[]>([]);
+  const [isMobile,setIsMobile] = useState(window.innerWidth < 640);
+  useEffect(()=>{
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener("resize",handleResize);
+    return ()=> window.removeEventListener("resize",handleResize);
+  },[])
   const fetchSchedule = async(start:string,end:string)=>{
     try{
       if(!token) return;
@@ -47,7 +56,7 @@ const Schedule = () => {
 
 
   return (
-    <div className="h-[80vh]">
+    <div className="h-[70vh] sm:h-[80vh]">
       <FullCalendar 
         plugins={[dayGridPlugin,timeGridPlugin,listPlugin,interactionPlugin]}
         locale={'ja'}
@@ -58,7 +67,13 @@ const Schedule = () => {
           const end = info.endStr.slice(0,10);
           fetchSchedule(start,end);
         }}
-        headerToolbar={{
+        headerToolbar={
+          isMobile
+          ? {
+            left:"prev,next",
+            center:"title",
+            right:"today",
+          }:{
           left:'prev,next,today',
           center:'title',
           right:'dayGridMonth,timeGridWeek,listWeek',
@@ -76,7 +91,7 @@ const Schedule = () => {
         height={'100%'}
         />
         <div className="flex justify-center mt-10">
-          <button className="text-2xl p-6 bg-[#D9D9D9] rounded-lg hover:scale-[1.05] transition-transform"
+          <button className="text-base sm:text-3xl p-6 bg-[#D9D9D9] rounded-lg hover:scale-[1.05] transition-transform"
             onClick={() => openModal("schedule",{date:selectedDate})}>
             予定の追加</button>
         </div>

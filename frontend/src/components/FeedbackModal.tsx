@@ -45,7 +45,7 @@ const FeedbackModal = () => {
             e.preventDefault();
             handleSubmit();}}
             className="flex gap-10 flex-col h-full items-center ">
-        <h1 className="text-3xl mt-7 font-semibold">フィードバックの入力</h1>
+        <h1 className="text-2xl sm:text-3xl mt-7 font-semibold">フィードバックの入力</h1>
         <div className="flex text-2xl gap-5">
             <span>作業時間</span>
             <input type="number" min={0}
@@ -59,11 +59,11 @@ const FeedbackModal = () => {
                     className="w-[6vw] h-[4vh] rounded bg-[#D9D9D9] text-center hover:scale-[1.05] transition-transform"/>
             <span>分</span>
         </div>
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-wrap justify-center items-center gap-4">
             <span className="text-2xl">振り返り</span>
             <textarea value={feedbackContent}
                       onChange={(e)=>setFeedbackContent(e.target.value)}
-                     className="bg-[#D9D9D9] w-[30vw] h-[30vh] rounded-lg p-3 hover:scale-[1.03] transition-transform"></textarea>
+                     className="bg-[#D9D9D9] w-full h-[30vh] rounded-lg sm:åp-3 hover:scale-[1.03] transition-transform"></textarea>
         </div>
         <div className="flex gap-20 mt-auto mb-10">
         <button type="button"

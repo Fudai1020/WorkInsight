@@ -6,7 +6,7 @@ const Profile = () => {
   const location = useLocation();
   const isFirstLogin = location.state?.firstLogin;
   return (
-   <div className="mt-7 grid grid-rows-[40%_57%]  gap-10">
+   <div className="mt-7 flex flex-col sm:grid sm:grid-rows-[40%_57%] gap-6 sm:gap-10">
     <UserProfile/>
     <UserDetail firstLogin={isFirstLogin}/>
    </div>
