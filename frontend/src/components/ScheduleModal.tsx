@@ -45,7 +45,7 @@ const ScheduleModal = () => {
     <form onSubmit={submitForm}
           className="flex flex-col h-full gap-4 sm:gap-13">
         <h1 className="text-2xl sm:text-3xl font-semibold justify-center flex items-center mt-4">新しい予定</h1>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[auto_1fr] px-10 items-center">
+        <div className="grid grid-cols-1 gap-3 sm:gap-10 sm:grid-cols-[auto_minmax(280px,1fr)_auto] max-w-3xl mx-auto items-center">
         <span className="text-2xl text-center sm:text-3xl sm:text-right">題名</span>
             <input type="text"
                    value={scheduleTitle} 
@@ -53,7 +53,7 @@ const ScheduleModal = () => {
                    className="bg-[#D9D9D9] rounded h-[40px] text-black focus:outline mx-auto w-full max-w-md
                                p-4 text-xl shadow-md hover:scale-[1.05] transition-transform"/>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[auto_1fr] px-10 items-center">
+        <div className="grid grid-cols-1 gap-3 sm:gap-10 sm:grid-cols-[auto_minmax(280px,1fr)_auto] max-w-3xl mx-auto items-center">
         <span className="text-2xl text-center sm:text-3xl sm:text-right">日付</span>
             <input type="date"
                    value={scheduleDate}
@@ -61,7 +61,7 @@ const ScheduleModal = () => {
                     className="bg-[#D9D9D9] rounded h-[40px] text-black focus:outline mx-auto w-full max-w-md
                                p-4 text-xl shadow-md hover:scale-[1.05] transition-transform"/>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr_auto] px-10 gap-2 items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-[120px_minmax(280px,1fr)_auto] max-m-3xl mx-auto gap-2 sm:gap-10 items-center">
           <span className="text-2xl text-center sm:text-3xl sm:text-right">時間</span>
           <div className="flex items-center gap-2 mx-auto ">
             <input type="time" step="1800" disabled={allDay} 
@@ -81,9 +81,9 @@ const ScheduleModal = () => {
             終日
           </label>
         </div>
-         <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] px-10 items-start">
+         <div className="grid grid-cols-1 sm:grid-cols-[auto_minmax(280px,1fr)_auto] mx-auto sm:gap-10 items-start">
             <span className="text-2xl text-center sm:text-3xl sm:text-right">メモ</span>
-            <textarea className="mx-auto bg-[#D9D9D9] rounded w-full max-w-md h-[120px] 
+            <textarea className="mx-auto bg-[#D9D9D9] rounded w-full max-w-lg h-[120px] 
                       hover:scale-[1.05] transition-transform p-3"
                       value={scheduleMemo}
                       onChange={(e)=>setScheduleMemo(e.target.value)}></textarea>

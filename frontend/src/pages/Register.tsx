@@ -78,7 +78,7 @@ const Register = () => {
           <label className="text-xl sm:text-2xl mt-3">パスワード(確認)</label>
           <div className="relative w-full px-2">
             <input type={showPassword ? "text":"password"}
-                    className="w-full h-[50px] shadow-md bg-[#D5D5D5] rounded pl-5 text-base sm:text-lg
+                    className="w-full h-[50px] shadow-md bg-[#D5D5D5] rounded pl-5 text-base sm:text-xl
                               hover:scale-[1.05] transition-transform focus:scale-[1.05]" 
                     value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}/>
             <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:scale-[1.3] transition-transform" onClick={()=>setShowPassword(!showPassword)}>
