@@ -12,4 +12,5 @@ public interface TaskService {
     TaskResponse updateTask(Long taskId,String userEmail,UpdateTaskRequest request);
     TaskResponse updateTaskStatus(Long taskId,String userEmail);
     List<TaskResponse> getUpcomingTasks(String userEmail);
+    void deleteTask(Long taskId,String userEmail);
 }

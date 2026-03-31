@@ -2,6 +2,7 @@ import { useState } from "react"
 import { AiOutlineEye, AiOutlineEyeInvisible    } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { BASE_URL } from "../utils/Api";
 
 const Login = () => {
     const [userEmail,setUserEmail] = useState('');
@@ -22,7 +23,7 @@ const Login = () => {
             return;
         }
         try{
-            const response = await fetch("http://localhost:8080/api/users/login",{
+            const response = await fetch(`${BASE_URL}/users/login`,{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json"
