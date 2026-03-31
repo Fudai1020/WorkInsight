@@ -41,6 +41,7 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
         DONE:"完了",
         SKIPPED:"後で"
     };
+    //選択されたタスクの表示
     useEffect(()=>{
         if(selectedTask){
             setPriority(selectedTask.taskPriority);
@@ -49,6 +50,7 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
             setDate(selectedTask.taskDeadline ? new Date(selectedTask.taskDeadline) : null);
         }
     },[selectedTask]);
+    //タスク更新処理
     const handleUpdate = async()=>{
         if(!selectedTaskId) return;
         try{
@@ -61,6 +63,21 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
                     taskDeadline:date ? date.toISOString().split("T")[0] :null,
                     taskMemo:memo
                 })
+            });
+            await refreshTasks();
+        }catch(err){
+            console.error(err);
+        }
+    }
+    //タスク削除処理
+    const handleDelete = async() => {
+        if(!selectedTaskId) return;
+        const ok = window.confirm("このタスクを削除しますか？");
+        if(!ok) return;
+        try{
+            if(!token) return;
+            await fetchWithAuth(`/tasks/${selectedTaskId}`,token,logout,{
+                method:"DELETE",
             });
             await refreshTasks();
         }catch(err){
@@ -138,7 +155,8 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
                 </textarea>
             </div>
             <div className="flex gap-10 sm:gap-30 mb-10 w-full max-w-md">
-                <button className="text-xl bg-[#D9D9D9] p-4 rounded-lg shadow-md hover:scale-[1.05] transiton-transform">削除</button>
+                <button className="text-xl bg-[#D9D9D9] p-4 rounded-lg shadow-md hover:scale-[1.05] transiton-transform"
+                        onClick={handleDelete}>削除</button>
                 <button className="text-xl bg-[#D9D9D9] p-4 rounded-lg shadow-md hover:scale-[1.05] transiton-transform"
                         onClick={handleUpdate}>更新</button>
             </div>

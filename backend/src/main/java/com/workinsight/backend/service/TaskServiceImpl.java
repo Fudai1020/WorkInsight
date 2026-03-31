@@ -103,4 +103,13 @@ public class TaskServiceImpl implements TaskService{
             .map(TaskResponse::from)
             .toList();
     }
+    @Override
+    public void deleteTask(Long taskId,String userEmail){
+        TaskEntity task = taskRepository.findById(taskId)
+            .orElseThrow(()-> new TaskNotFindException("タスクが存在していません"));
+        if(!task.getUser().getUserEmail().equals(userEmail)){
+            throw new AccessDeniedException("権限がありません");
+        }
+        taskRepository.delete(task);
+    }
 }

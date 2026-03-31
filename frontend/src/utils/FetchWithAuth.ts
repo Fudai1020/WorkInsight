@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/api";
+const BASE_URL = import.meta.env.VITE_API_URL;
 export const fetchWithAuth = async(url:string,token:string,logout:()=>void,options?:RequestInit) =>{
     const response = await fetch(BASE_URL + url,{
         ...options,

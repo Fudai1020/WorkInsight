@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom"
+import { BASE_URL } from "../utils/Api";
 
 const Register = () => {
   const [userPassword,setUserPassword] = useState('');
@@ -24,7 +25,7 @@ const Register = () => {
       return;
     }
     try{
-      const response = await fetch("http://localhost:8080/api/users/register",{
+      const response = await fetch(`${BASE_URL}/users/register`,{
         method:"POST",
         headers:{
           "Content-Type":"application/json"

@@ -2,10 +2,13 @@ spring:
   application:
     name: backend
 
+  config: 
+    import: optional:file:.env[.properties]
+
   datasource:
-      url: jdbc:mysql://mysql:3306/workinsight
-      username: root
-      password: root
+      url: ${DB_URL}
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
   jackson:
     time-zone: Asia/Tokyo
   jpa:
@@ -17,5 +20,5 @@ spring:
           format_sql: true
 
 jwt:
-    secret: ThisIsSuperSecureJwtSecretKey1234567890
+    secret: ${JWT_SECRET}
     expiration: 3600000
