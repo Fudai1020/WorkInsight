@@ -7,6 +7,9 @@
 ## アプリURL
 https://work-insight.vercel.app
 ※Render無料プランのため初回アクセス時は数十秒かかる場合があります
+サンプル
+メールアドレス：test@sample.com
+パスワード：test123
 ## スクリーンショット
 ダッシュボード　今日期限のタスク一覧、今日の予定一覧、今日のサボりデータ、タイマー
 <img width="1706" height="857" alt="Image" src="https://github.com/user-attachments/assets/a74c0f19-68c3-45b3-be7c-3d0ebe48ce16" />
