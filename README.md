@@ -9,7 +9,7 @@ https://work-insight.vercel.app
 ※Render無料プランのため初回アクセス時は数十秒かかる場合があります
 ## スクリーンショット
 ダッシュボード　今日期限のタスク一覧、今日の予定一覧、今日のサボりデータ、タイマー
-<img width="1096" height="791" alt="Image" src="https://github.com/user-attachments/assets/0bd4092d-c744-46a7-84e5-a16160cb85c2" />
+<img width="1706" height="857" alt="Image" src="https://github.com/user-attachments/assets/a74c0f19-68c3-45b3-be7c-3d0ebe48ce16" />
 ## 使用技術
 
 ### フロントエンド
