@@ -15,6 +15,7 @@ const UserDetail = ({firstLogin}:Props) => {
   const [timer,setTimer] = useState(0);
   const days:WeekDay[]=["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY"];
   const {token,logout} = useAuth();
+  //対応する曜日を設定
   const DAY_LABEL : Record<WeekDay,string> = {
     MONDAY:'月',
     TUESDAY:'火',
@@ -24,11 +25,15 @@ const UserDetail = ({firstLogin}:Props) => {
     SATURDAY:'土',
     SUNDAY:'日'};
   const [selectedDays,setSelectedDays] = useState<WeekDay[]>([]);
+
+  //初回ログインの場合編集モードを起動
   useEffect(()=>{
     if(firstLogin){
       setEditMode(true);
     }
-  },[firstLogin]);
+  },[firstLogin])
+
+  //ユーザ設定をDBから取得し値をセット
   useEffect(()=>{
     if(settings){
       setStartTime(settings.workStartTime);
@@ -38,7 +43,9 @@ const UserDetail = ({firstLogin}:Props) => {
       setTimer(settings.breakMinutes);
       setSelectedDays(settings.settingWeek ?? []);
     }
-  },[settings]);
+  },[settings])
+
+  //ユーザ設定更新のリクエスト
   const updateSetting = async ()=>{
     try{
       if(!token) return;

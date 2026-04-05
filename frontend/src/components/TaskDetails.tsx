@@ -69,7 +69,7 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
             console.error(err);
         }
     }
-    //タスク削除処理
+    //タスク削除処理リクエスト
     const handleDelete = async() => {
         if(!selectedTaskId) return;
         const ok = window.confirm("このタスクを削除しますか？");
@@ -85,16 +85,16 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
         }
     }
   return (
-    <div className="flex flex-col items-center gap-5 h-full">
-        <h1 className="text-xl sm:text-4xl text-center mt-10 ">{selectedTask?.taskTitle ?? "タスクを選択してください"}</h1>
-        <div className="flex flex-col items-center gap-5 sm:gap-10 cursor-pointer select-none h-full">
-            <div className="flex items-center gap-5 hover:opacity-70 mt-6 relative"
+    <div className="flex flex-col items-center h-full gap-7">
+        <h1 className="text-xl sm:text-3xl font-bold text-center mt-3 ">{selectedTask?.taskTitle ?? "タスクを選択してください"}</h1>
+        <div className="flex flex-col items-center gap-5  cursor-pointer select-none h-full">
+            <div className="flex items-center gap-5 mt-6 relative"
                 onClick={()=>setOpen(!open)}>
                 <span className="text-2xl sm:text-3xl">優先度:</span>
                 <span className="font-semibold text-2xl sm:text-3xl">{priority? PRIORITY_LABELS[priority] : ""}</span>
                 <span className="text-2xl">▼</span>
             {open && (
-                <ul className="absolute top-full right-0 mt-1 bg-white shadow-md rounded-md w-24 z-20">
+                <ul className="absolute top-full right-0 mt-1 bg-white shadow-md rounded-md w-24 z-10">
                     {Object.entries(PRIORITY_LABELS).map(([key,label]) =>(
                         <li key={key} className="px-3  py-1 hover:bg-gray-200"
                             onClick={()=>{
@@ -107,15 +107,15 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
                 </ul>
             )}
             </div>
-            <div className=" flex items-center gap-5 hover:opacity-70  relative"
+            <div className=" flex items-center gap-5 relative"
                 onClick={()=>setStateOpen(!stateOpen)}>
                 <span className="text-2xl sm:text-3xl">状態:</span>
                 <span className="font-semibold text-2xl sm:text-3xl">{state ? STATUS_LABELS[state] :""}</span>
                 <span className="text-2xl">▼</span>
             {stateOpen && (
-                <ul className="absolute right-0 bg-white shadow-md top-full rounded-md w-24 ">
+                <ul className="absolute right-0 bg-white shadow-md top-full rounded-md w-24 z-10">
                     {Object.entries(STATUS_LABELS).map(([key,label]) =>(
-                        <li key={key} className="px-3  py-1 hover:bg-gray-200"
+                        <li key={key} className="px-3  py-1 hover:bg-gray-200 hover:z-10"
                             onClick={()=>{
                                 setState(key as Status);
                                 setStateOpen(false);
@@ -145,7 +145,7 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
                 </div>
             )}
             </div>
-            <div className="flex flex-col items-center gap-5">
+            <div className="flex flex-col items-center gap-2">
                 <label htmlFor="memo" className="text-2xl sm:text-3xl">メモ</label>
                 <textarea id="memo" name="memo"
                          className="bg-white shadow-md rounded w-full sm:p-5 h-50 max-w-lg 
@@ -154,7 +154,7 @@ const TaskDetails = ({tasks,selectedTaskId,refreshTasks}:props) => {
                         onChange={(e) => setmemo(e.target.value)}>
                 </textarea>
             </div>
-            <div className="flex gap-10 sm:gap-30 mb-10 w-full max-w-md">
+            <div className="flex gap-10 mt-5 sm:gap-30 mb-5 w-full max-w-md justify-center">
                 <button className="text-xl bg-[#D9D9D9] p-4 rounded-lg shadow-md hover:scale-[1.05] transiton-transform"
                         onClick={handleDelete}>削除</button>
                 <button className="text-xl bg-[#D9D9D9] p-4 rounded-lg shadow-md hover:scale-[1.05] transiton-transform"

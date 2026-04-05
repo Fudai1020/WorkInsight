@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react"
 import { AiOutlineHome } from "react-icons/ai";
 import { BsLayoutSidebar } from "react-icons/bs";
-import { CiUser } from "react-icons/ci";
+import { CiLogout, CiUser } from "react-icons/ci";
 import { FcTodoList } from "react-icons/fc";
 import { GrSchedule } from "react-icons/gr";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useModal } from "../context/ModalContext";
 import { useUser } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
 
 const Sidebar = () => {
     const [isOpen,setIsOpen] = useState(window.innerWidth >= 640);
     const {closeModal} = useModal();
     const {userData} = useUser();
+    const {logout} = useAuth();
+    const navigate = useNavigate();
+    //画面サイズによってサイドバー開閉を管理
     useEffect(()=>{
         const handleResize = () =>{
             if(window.innerWidth < 640){
@@ -24,6 +28,11 @@ const Sidebar = () => {
         window.addEventListener("resize",handleResize);
         return () => window.removeEventListener("resize",handleResize);
     },[])
+    //ログアウト処理
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    }
   return (
     <div className={`${isOpen ? "w-[250px]":"w-[80px] sm:w-[90px]"} shadow-[4px_0_8px_rgba(0,0,0,0.05)] flex flex-col
                     bg-[#F5F5F5] h-screen p-4 transition-all duration-300 border-r border-gray-200`}>
@@ -57,13 +66,20 @@ const Sidebar = () => {
         </NavLink>
         </div>
         <NavLink to='/profile'
-                    className={({isActive}) => `mt-auto mb-5 flex gap-3 rounded-lg p-3 items-center
+                    className={({isActive}) => `mt-10 flex gap-3 rounded-lg p-3 items-center
                                 transitional-all ${isActive ? 'bg-gray-200':'hover:bg-gray-200'}`}>
         {!isOpen ? 
             <CiUser size={30}/>:
         <><CiUser size={30} /><span className="text-xl">{userData?.userName ?? "ユーザ名"}</span></>
         }
         </NavLink>
+        <div className="mt-auto flex gap-3 rounded-lg p-3 hover:bg-gray-200 mb-3"
+             onClick={handleLogout}>
+        {!isOpen ? 
+            <CiLogout size={30}/>:
+        <><CiLogout size={30}/><span className="text-xl">ログアウト</span></>    
+    }
+        </div>
     </div>
   )
 }

@@ -54,10 +54,10 @@ const TodoList = () => {
         }
     };
   return (
-    <div className="flex  flex-col gap-5 px-4 sm:px-6">
+    <div className="flex  flex-col gap-3 px-4 sm:px-6">
         <span className="text-center text-2xl sm:text-3xl font-bold ">タスク一覧</span>
         <main className="flex-1 min-h-0">
-        <div className="border rounded-xl  shadow-lg flex flex-col xl:flex-row  bg-[#F5F5F5] h-full">
+        <div className="border rounded-xl mt-3 shadow-lg flex flex-col xl:flex-row  bg-[#F5F5F5] h-full">
             <div className="sm:basis-1/3 p-6 border-b sm:border-b-0 sm:border-r shadow-ls  overflow-y-auto">
                 <TaskList tasks={tasks} onSelectedId={setSelectedId} selectedTaskId={selectedId} onToggleStatus={toggleTaskStatus}/>
             </div>

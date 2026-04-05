@@ -10,13 +10,15 @@ const UserProfile = () => {
     const [userMemo,setUserMemo] = useState('');
     const [editMode,setEditMode] = useState(false);
     const {token,logout} = useAuth();
+    //DBから取得したユーザデータの設定
     useEffect(()=>{
         if(userData){
             setUserName(userData.userName ?? "");
             setUserEmail(userData.userEmail ?? "");
             setUserMemo(userData.userMemo ?? "");
         }
-    },[userData]);
+    },[userData])
+    //ユーザ情報更新リクエスト
     const updateUser = async()=>{
         try{
             if(!token) return;
