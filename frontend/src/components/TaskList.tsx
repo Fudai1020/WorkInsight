@@ -11,6 +11,8 @@ onToggleStatus:(taskId:number)=>void;
 const TaskList = ({tasks,onSelectedId,selectedTaskId,onToggleStatus}:props) => {    
     const {openModal} = useModal();
     const [isOpen,setIsOpen] = useState(false);
+
+    //期限を過ぎているかの判定　戻り値：boolean
     const isOverdue = (deadline:string | null) =>{
         if(!deadline) return false;
         const today = new Date();
@@ -87,7 +89,7 @@ const TaskList = ({tasks,onSelectedId,selectedTaskId,onToggleStatus}:props) => {
             )}
         </div>
 
-        <div className=" text-base sm:text-xl mt-auto pb-6 text-center underline hover:scale-[1.02] cursor-pointer"
+        <div className=" text-base sm:text-xl mt-auto text-center underline hover:scale-[1.02] cursor-pointer"
             onClick={() => openModal("task",{data:tasks})}>+タスクを追加する
         </div>
     </div>

@@ -20,6 +20,7 @@ export const UserProvider = ({children}:Props) =>{
     const [userData,setUserData] = useState<User | null>(null);
     const [loading,setLoading] = useState(true);
     const {token,logout} = useAuth();
+    //ユーザ情報を取得する処理
     const fetchUser = useCallback(async () =>{
         if(!token) {
             setLoading(false);

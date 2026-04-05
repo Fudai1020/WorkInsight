@@ -90,8 +90,8 @@ const Schedule = () => {
         selectable={true}
         height={'100%'}
         />
-        <div className="flex justify-center mt-10">
-          <button className="text-base sm:text-3xl p-6 bg-[#D9D9D9] rounded-lg hover:scale-[1.05] transition-transform"
+        <div className="flex justify-center mt-5">
+          <button className="text-base sm:text-2xl p-6 bg-[#D9D9D9] rounded-lg hover:scale-[1.05] transition-transform"
             onClick={() => openModal("schedule",{date:selectedDate})}>
             予定の追加</button>
         </div>
