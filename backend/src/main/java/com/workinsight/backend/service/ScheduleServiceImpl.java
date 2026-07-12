@@ -13,6 +13,7 @@ import com.workinsight.backend.dto.ScheduleResponse;
 import com.workinsight.backend.entity.ScheduleEntity;
 import com.workinsight.backend.entity.UserEntity;
 import com.workinsight.backend.enums.ScheduleRange;
+import com.workinsight.backend.exception.ScheduleNotFindException;
 import com.workinsight.backend.exception.UserNotFoundException;
 import com.workinsight.backend.repository.ScheduleRepository;
 import com.workinsight.backend.repository.UserRepository;
@@ -92,4 +93,50 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .map(ScheduleResponse::from)
                 .toList();
     } 
+    @Override
+    public ScheduleResponse updateSchedule(String userEmail,Long id,ScheduleFormRequest request){
+        
+        UserEntity user = userRepository.findByUserEmail(userEmail)
+            .orElseThrow(() -> new UserNotFoundException("ユーザが見当たりません"));
+
+        ScheduleEntity schedule = scheduleRepository.findById(id)
+            .orElseThrow(() -> new ScheduleNotFindException("予定が見つかりません"));
+
+
+
+        if(!schedule.getUser().getUserEmail().equals(user.getUserEmail())){
+            throw new ScheduleNotFindException("アクセス権限がありません");
+        }
+
+        LocalTime startTime = null;
+        LocalTime endTime = null;
+        if(!request.isAllDay()){
+            if(request.getStartTime() == null || request.getEndTime() == null){
+                throw new IllegalArgumentException("開始・終了時間は必須です");
+            }
+            if(!request.getStartTime().isBefore(request.getEndTime())){
+                throw new IllegalArgumentException("開始時間は終了時間より前である必要があります");
+            }
+            startTime = request.getStartTime();
+            endTime = request.getEndTime();
+        }
+
+        schedule.setScheduleTitle(request.getScheduleTitle());
+        schedule.setScheduleDate(request.getScheduleDate());
+        schedule.setScheduleStarttime(startTime);
+        schedule.setScheduleEndtime(endTime);
+        schedule.setIsAllday(request.isAllDay());
+        schedule.setScheduleMemo(request.getScheduleMemo());
+
+        ScheduleEntity saved = scheduleRepository.save(schedule);
+        return ScheduleResponse.builder()
+                .scheduleId(saved.getScheduleId())
+                .scheduleTitle(saved.getScheduleTitle())
+                .scheduleDate(saved.getScheduleDate())
+                .startTime(saved.getScheduleStarttime())
+                .endTime(saved.getScheduleEndtime())
+                .allday(saved.getIsAllday())
+                .scheduleMemo(saved.getScheduleMemo())
+                .build();      
+    }
 }

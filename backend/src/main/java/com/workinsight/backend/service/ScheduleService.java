@@ -11,4 +11,5 @@ public interface ScheduleService {
     ScheduleResponse createSchedule(String userEmail,ScheduleFormRequest request);
     List<ScheduleResponse> getSchedulesByRange(String userEmail,ScheduleRange range);
     List<ScheduleResponse> getScheduleByPeriod(String userEmail,LocalDate start,LocalDate end);
+    ScheduleResponse updateSchedule(String userEmail,Long id,ScheduleFormRequest request);
 }

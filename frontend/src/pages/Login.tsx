@@ -14,6 +14,7 @@ const Login = () => {
 
     const handleLogin = async(e:React.FormEvent) =>{
         e.preventDefault();
+        //入力チェック
         if(!userEmail || !userPassword){
             setError('メールアドレスまたはパスワードを入力してください');
             return;
@@ -22,6 +23,7 @@ const Login = () => {
             setError('ただしいメールアドレスを入力してください');
             return;
         }
+        //サーバーにログインリクエストを送信
         try{
             const response = await fetch(`${BASE_URL}/users/login`,{
                 method:"POST",

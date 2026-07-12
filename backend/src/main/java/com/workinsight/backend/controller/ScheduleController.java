@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 
@@ -43,6 +46,12 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleResponse>> getSchedulesByPeriod(Principal principal,@RequestParam LocalDate start,@RequestParam LocalDate end) {
         return ResponseEntity.ok(scheduleService.getScheduleByPeriod(principal.getName(), start, end));
     }
-    
+    @PutMapping("/{id}")
+    public ResponseEntity<ScheduleResponse> updateSchedule(Principal principal,@PathVariable Long id, @RequestBody @Valid ScheduleFormRequest request) {
+
+        scheduleService.updateSchedule(principal.getName(),id,request);
+        
+        return ResponseEntity.ok().build();
+    }
     
 }

@@ -1,25 +1,33 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useModal } from "../context/ModalContext";
 import { useDashboard } from "../context/DashboardContext";
 import { useAuth } from "../context/AuthContext";
+import { fetchWithAuth } from "../utils/FetchWithAuth";
 
 
 const ScheduleModal = () => {
   const {refreshDashboard} = useDashboard();
-  const {closeModal} = useModal();
+  const {closeModal,modalData} = useModal();
   const [allDay,setAllDay] = useState(false);
   const [scheduleTitle,setScheduleTitle] = useState('');
   const [scheduleDate,setScheduleDate] = useState("");
   const [startTime,setStartTime] = useState("");
   const [endTime,setEndTime] = useState("");
   const [scheduleMemo,setScheduleMemo] = useState("");
-  const {token} = useAuth();
+  const {token,logout} = useAuth();
+
+  //入力したスケジュールの送信処理
   const submitForm = async (e:React.FormEvent) =>{
     e.preventDefault();
+
+      const url = modalData?.mode === "edit" ? `/schedules/${modalData.event.id}` :"/schedules";
+
+      const method = modalData?.mode === "edit" ? "PUT":"POST";
+
     try{
       if(!token) return;
-      const response = await fetch("http://localhost:8080/api/schedules",{
-        method:"post",
+      const response = await fetchWithAuth(url,token,logout,{
+        method:method,
         headers:{
           Authorization:`Bearer ${token}`,
           "Content-Type":"application/json"
@@ -34,6 +42,7 @@ const ScheduleModal = () => {
         })
       });
       if(response.ok){
+        await modalData?.onSuccess?.();
         await refreshDashboard();  
         closeModal();
       }
@@ -41,6 +50,30 @@ const ScheduleModal = () => {
       throw new Error("データの送信に失敗しました");
     }
   }
+  //日付を変換
+  const formatDate = (date:Date) =>{
+    return date.toISOString().slice(0,10);
+  }
+
+  //時間を変換
+  const formatTime = (time:Date) => {
+    return time.toTimeString().slice(0,5);
+  }
+
+  //登録済みのデータを編集する際の情報取得
+  useEffect(()=> {
+    if(modalData?.mode === "edit"){
+      const event = modalData.event;
+
+      setScheduleTitle(event.title);
+      setScheduleDate(formatDate(event.date));
+      setStartTime(formatTime(event.start));
+      setEndTime(formatTime(event.end));
+      setAllDay(event.allDay);
+      setScheduleMemo(event.scheduleMemo);
+    }
+  },[modalData])
+  
   return (
     <form onSubmit={submitForm}
           className="flex flex-col h-full gap-4 sm:gap-13">

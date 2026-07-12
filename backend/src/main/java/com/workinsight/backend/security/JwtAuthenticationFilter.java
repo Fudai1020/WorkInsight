@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -23,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain filterChain) 
+    protected void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull FilterChain filterChain) 
     throws ServletException,IOException{
         String token = resloveToken(request);
         if(token != null && jwtTokenProvider.validateToken(token)){
@@ -42,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         return null;
     }
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request){
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request){
         String path = request.getServletPath();
         return path.equals("/api/users/login") || path.equals("/api/users/register");
     }
