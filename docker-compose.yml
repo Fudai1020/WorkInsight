@@ -6,9 +6,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: workinsight
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: db_workinsight
+      MYSQL_PASSWORD: pass_workinsight
       TZ: 'Asia/Tokyo'
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db-data:/var/lib/mysql
       - ./mysql/conf.d:/etc/mysql/conf.d
@@ -32,9 +35,8 @@ services:
         condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/workinsight?serverTimezone=Asia/Tokyo
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      MYSQL_ROOT_HOST: "%"
+      SPRING_DATASOURCE_USERNAME: db_workinsight
+      SPRING_DATASOURCE_PASSWORD: pass_workinsight
       JWT_SWECRET: ThisIsSuperSecureJwtSecretKey1234567890
       TZ: Asia/Tokyo
 

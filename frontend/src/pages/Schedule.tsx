@@ -13,6 +13,12 @@ const Schedule = () => {
   const {token,logout} = useAuth();
   const [events,setEvents] = useState<any[]>([]);
   const [isMobile,setIsMobile] = useState(window.innerWidth < 640);
+  const [calendarRange,setCalendarRange] = useState({
+    start:"",
+    end:""
+  });
+
+  //画面サイズに合わせてサイズを編集
   useEffect(()=>{
     const handleResize = () => {
       setIsMobile(window.innerWidth < 640);
@@ -21,6 +27,8 @@ const Schedule = () => {
     window.addEventListener("resize",handleResize);
     return ()=> window.removeEventListener("resize",handleResize);
   },[])
+
+  //スケジュールを取得してFullCalendarにセット
   const fetchSchedule = async(start:string,end:string)=>{
     try{
       if(!token) return;
@@ -35,6 +43,9 @@ const Schedule = () => {
             title:s.scheduleTitle,
             start:s.scheduleDate,
             allDay:true,
+            extendedProps:{
+            scheduleMemo:s.scheduleMemo,
+          }
           }
         }else{
           startDateTime = `${s.scheduleDate}T${s.startTime}`;
@@ -46,6 +57,9 @@ const Schedule = () => {
           start:startDateTime,
           end:endDateTime,
           allDay:s.allday,
+          extendedProps:{
+            scheduleMemo:s.scheduleMemo,
+          }
         };
       });
       setEvents(formatted);
@@ -54,6 +68,19 @@ const Schedule = () => {
     }
   }
 
+  //すでに追加されている予定押下時の処理
+  const handleEventClick = (info:any) =>{
+    const clickedEvent = {
+      id:info.event.id,
+      title:info.event.title,
+      date:info.event.start,
+      start:info.event.start,
+      end:info.event.end,
+      allDay:info.event.allDay,
+      scheduleMemo:info.event.extendedProps.scheduleMemo
+    };
+    openModal("schedule",{mode:"edit",event:clickedEvent,onSuccess:()=>fetchSchedule(calendarRange.start,calendarRange.end)});
+  }
 
   return (
     <div className="h-[70vh] sm:h-[80vh]">
@@ -65,6 +92,7 @@ const Schedule = () => {
         datesSet={(info)=>{
           const start = info.startStr.slice(0,10);
           const end = info.endStr.slice(0,10);
+          setCalendarRange({start,end})
           fetchSchedule(start,end);
         }}
         headerToolbar={
@@ -87,12 +115,13 @@ const Schedule = () => {
         dateClick={(info) => {
           setSelectedDate(info.date);
         }}
+        eventClick={(info) => handleEventClick(info)}
         selectable={true}
         height={'100%'}
         />
         <div className="flex justify-center mt-5">
           <button className="text-base sm:text-2xl p-6 bg-[#D9D9D9] rounded-lg hover:scale-[1.05] transition-transform"
-            onClick={() => openModal("schedule",{date:selectedDate})}>
+            onClick={() => openModal("schedule",{mode:"create",date:selectedDate,onSuccess:()=>fetchSchedule(calendarRange.start,calendarRange.end)})}>
             予定の追加</button>
         </div>
     </div>

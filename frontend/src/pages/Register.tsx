@@ -10,6 +10,13 @@ const Register = () => {
   const [confirmPassword,setConfirmPassword] = useState('');
   const [showPassword,setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  //パスワードの入力制限
+  const inputCheck = (value:string,setter:React.Dispatch<React.SetStateAction<string>>) => {
+    setter(value.replace(/[^\x20-\x7E]/g,''));
+  }
+
+  //新規登録処理
   const handleRegister = async(e:React.FormEvent)=>{
     e.preventDefault();
     if(!userEmail || !userPassword){
@@ -24,6 +31,7 @@ const Register = () => {
       setError('パスワードが一致していません');
       return;
     }
+    //サーバにユーザを登録するリクエストの送信
     try{
       const response = await fetch(`${BASE_URL}/users/register`,{
         method:"POST",
@@ -69,7 +77,7 @@ const Register = () => {
             <input type={showPassword ? "text":"password"}
                     className="w-full h-[50px] shadow-md bg-[#D5D5D5] rounded pl-5 text-base sm:text-xl
                               hover:scale-[1.05] transition-transform focus:scale-[1.05]" 
-                   value={userPassword} onChange={(e)=>setUserPassword(e.target.value)}/>
+                   value={userPassword} onChange={(e)=>inputCheck(e.target.value,setUserPassword)}/>
             <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:scale-[1.3] transition-transform"
                  onClick={()=>setShowPassword(!showPassword)}>
               {showPassword ? <AiOutlineEyeInvisible size={22}/>:<AiOutlineEye size={22}/>}
@@ -80,7 +88,7 @@ const Register = () => {
             <input type={showPassword ? "text":"password"}
                     className="w-full h-[50px] shadow-md bg-[#D5D5D5] rounded pl-5 text-base sm:text-xl
                               hover:scale-[1.05] transition-transform focus:scale-[1.05]" 
-                    value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}/>
+                    value={confirmPassword} onChange={(e)=>inputCheck(e.target.value,setConfirmPassword)}/>
             <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:scale-[1.3] transition-transform" onClick={()=>setShowPassword(!showPassword)}>
               {showPassword ? <AiOutlineEyeInvisible size={22}/>:<AiOutlineEye size={22}/>}
             </div>

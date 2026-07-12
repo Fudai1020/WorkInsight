@@ -12,7 +12,7 @@ const UserDetail = ({firstLogin}:Props) => {
   const [endTime,setEndTime] = useState("");
   const [restStartTime,setRestStartTime] = useState("");
   const [restEndTime,setRestEndTime] = useState("");
-  const [timer,setTimer] = useState(0);
+  const [timer,setTimer] = useState("");
   const days:WeekDay[]=["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY"];
   const {token,logout} = useAuth();
   //対応する曜日を設定
@@ -25,6 +25,13 @@ const UserDetail = ({firstLogin}:Props) => {
     SATURDAY:'土',
     SUNDAY:'日'};
   const [selectedDays,setSelectedDays] = useState<WeekDay[]>([]);
+
+  //かな入力を半角に変換
+  const normalizedNumber = (value:string) => {
+    return value.replace(/[０-９]/g,(s)=>
+      String.fromCharCode(s.charCodeAt(0)-65248)
+    );
+  }
 
   //初回ログインの場合編集モードを起動
   useEffect(()=>{
@@ -40,7 +47,7 @@ const UserDetail = ({firstLogin}:Props) => {
       setEndTime(settings.workEndTime);
       setRestStartTime(settings.restStartTime);
       setRestEndTime(settings.restEndTime);
-      setTimer(settings.breakMinutes);
+      setTimer(settings.breakMinutes.toString());
       setSelectedDays(settings.settingWeek ?? []);
     }
   },[settings])
@@ -109,8 +116,8 @@ const UserDetail = ({firstLogin}:Props) => {
               <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-3">
                 <input type="text" value={timer} 
                        onChange={(e) => {
-                        const value = e.target.value;
-                        setTimer(value === ""?0:Number(value))}}
+                        const nomalized = normalizedNumber(e.target.value);
+                        setTimer(nomalized)}}
                       className="bg-[#D9D9D9] rounded-lg  text-xl sm:text-2xl text-center w-24 sm:w-[35%]" />
                 <span className="text-2xl sm:text-3xl">m</span></div>
                 :<span className="text-2xl sm:text-3xl">{timer}m</span>
