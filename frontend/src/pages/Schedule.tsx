@@ -32,36 +32,23 @@ const Schedule = () => {
   const fetchSchedule = async(start:string,end:string)=>{
     try{
       if(!token) return;
-        const res = await fetchWithAuth(`/schedules/period?start=${start}&end=${end}`,token,logout);
+        const res = await fetchWithAuth(`/schedules/range?start=${start}&end=${end}`,token,logout);
         const data = await res.json();
         const formatted = data.map((s:any)=>{
-        let startDateTime;
-        let endDateTime;
-        if(s.allday){
-          return{
-            id:s.scheduleId,
-            title:s.scheduleTitle,
-            start:s.scheduleDate,
-            allDay:true,
-            extendedProps:{
-            scheduleMemo:s.scheduleMemo,
-          }
-          }
-        }else{
-          startDateTime = `${s.scheduleDate}T${s.startTime}`;
-          endDateTime = `${s.scheduleDate}T${s.endTime}`;
-        }
         return{
-          id:s.scheduleId,
-          title:s.scheduleTitle,
-          start:startDateTime,
-          end:endDateTime,
-          allDay:s.allday,
+          id:`${s.kind}-${s.id}`,     //FullCalendarで一意で判断するためのid
+          title:s.title,
+          start:s.start,
+          end:s.end,
+          allDay:s.allDay,
           extendedProps:{
-            scheduleMemo:s.scheduleMemo,
+            sourceId:s.id,
+            scheduleMemo:s.memo,
+            kind:s.kind
           }
         };
       });
+      console.log(formatted)
       setEvents(formatted);
     }catch(err){
       console.error(err);
@@ -71,15 +58,15 @@ const Schedule = () => {
   //すでに追加されている予定押下時の処理
   const handleEventClick = (info:any) =>{
     const clickedEvent = {
-      id:info.event.id,
+      id:info.event.extendedProps.sourceId,    //更新用のid
       title:info.event.title,
       date:info.event.start,
       start:info.event.start,
       end:info.event.end,
       allDay:info.event.allDay,
       scheduleMemo:info.event.extendedProps.scheduleMemo
-    };
-    openModal("schedule",{mode:"edit",event:clickedEvent,onSuccess:()=>fetchSchedule(calendarRange.start,calendarRange.end)});
+    };  
+    openModal("schedule",{mode:"edit",kind:info.event.extendedProps.kind,event:clickedEvent,onSuccess:()=>fetchSchedule(calendarRange.start,calendarRange.end)});
   }
 
   return (
@@ -117,6 +104,7 @@ const Schedule = () => {
         }}
         eventClick={(info) => handleEventClick(info)}
         selectable={true}
+        
         height={'100%'}
         />
         <div className="flex justify-center mt-5">

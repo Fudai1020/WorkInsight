@@ -1,5 +1,6 @@
 package com.workinsight.backend.service;
 
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -8,22 +9,29 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.workinsight.backend.dto.CalendarEventResponse;
+import com.workinsight.backend.dto.CreatePeriodSchedule;
+import com.workinsight.backend.dto.PeriodScheduleResponse;
 import com.workinsight.backend.dto.ScheduleFormRequest;
 import com.workinsight.backend.dto.ScheduleResponse;
+import com.workinsight.backend.entity.PeriodScheduleEntity;
 import com.workinsight.backend.entity.ScheduleEntity;
 import com.workinsight.backend.entity.UserEntity;
 import com.workinsight.backend.enums.ScheduleRange;
 import com.workinsight.backend.exception.ScheduleNotFindException;
 import com.workinsight.backend.exception.UserNotFoundException;
+import com.workinsight.backend.repository.PeriodScheduleRepository;
 import com.workinsight.backend.repository.ScheduleRepository;
 import com.workinsight.backend.repository.UserRepository;
 @Service
 public class ScheduleServiceImpl implements ScheduleService{
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
-    public ScheduleServiceImpl(ScheduleRepository scheduleRepository,UserRepository userRepository) {
+    private final PeriodScheduleRepository periodScheduleRepository;
+    public ScheduleServiceImpl(ScheduleRepository scheduleRepository,UserRepository userRepository,PeriodScheduleRepository periodScheduleRepository) {
         this.scheduleRepository = scheduleRepository;
         this.userRepository = userRepository;
+        this.periodScheduleRepository = periodScheduleRepository;
     }
     @Override
     public ScheduleResponse createSchedule(String userEmail,ScheduleFormRequest request){
@@ -93,6 +101,15 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .map(ScheduleResponse::from)
                 .toList();
     } 
+    //カレンダー取得
+    @Override
+    public List<CalendarEventResponse> getCalendarByPeriod(String userEmail,LocalDate start,LocalDate end){
+        return scheduleRepository.findCalendarEventProjections(userEmail, start, end)
+                .stream()
+                .map(CalendarEventResponse::from)
+                .toList();
+    }
+
     @Override
     public ScheduleResponse updateSchedule(String userEmail,Long id,ScheduleFormRequest request){
         
@@ -101,8 +118,6 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         ScheduleEntity schedule = scheduleRepository.findById(id)
             .orElseThrow(() -> new ScheduleNotFindException("予定が見つかりません"));
-
-
 
         if(!schedule.getUser().getUserEmail().equals(user.getUserEmail())){
             throw new ScheduleNotFindException("アクセス権限がありません");
@@ -138,5 +153,74 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .allday(saved.getIsAllday())
                 .scheduleMemo(saved.getScheduleMemo())
                 .build();      
+    }
+
+    //期間予定の追加処理
+    @Override
+    public PeriodScheduleResponse createPeriodSchedule(String userEmail,CreatePeriodSchedule request){
+        //ユーザ認証
+        UserEntity user = userRepository.findByUserEmail(userEmail)
+                            .orElseThrow(() -> new UserNotFoundException("ユーザが見つかりません"));
+
+        //開始日、終了日のチェック
+
+        if (request.getStartDate() == null || request.getEndDate() == null) {
+            throw new IllegalArgumentException("開始日、終了日の入力は必須です");
+        }
+        if(request.getStartDate().isAfter(request.getEndDate())){
+            throw new IllegalArgumentException("開始日は終了日よりも前である必要があります");
+        }
+        
+        //エンティティへの保存処理
+        PeriodScheduleEntity periodSchedule = PeriodScheduleEntity.builder()
+                                .periodScheduleTitle(request.getScheduleTitle())
+                                .startDate(request.getStartDate())
+                                .endDate(request.getEndDate())
+                                .scheduleMemo(request.getScheduleMemo())
+                                .user(user)
+                                .build();
+        PeriodScheduleEntity saved = periodScheduleRepository.save(periodSchedule);
+        //resopnseDTOに置き換えてクライアントに返却
+        return PeriodScheduleResponse.builder()
+                .periodScheduleId(saved.getPeriodScheduleId())
+                .periodScheduleTitle(saved.getPeriodScheduleTitle())
+                .startDate(saved.getStartDate())
+                .endDate(saved.getEndDate())
+                .scheduleMemo(saved.getScheduleMemo())
+                .build();
+    }
+    //期間予定の更新処理
+    @Override
+    public PeriodScheduleResponse updatePeriodSchedule(String userEmail,Long id,CreatePeriodSchedule request){
+        UserEntity user = userRepository.findByUserEmail(userEmail)
+                        .orElseThrow(() -> new UserNotFoundException("ユーザが見つかりません"));
+        PeriodScheduleEntity schedule = periodScheduleRepository.findById(id)
+                            .orElseThrow(()-> new ScheduleNotFindException("予定が見つかりません"));
+
+        if(!schedule.getUser().getUserEmail().equals(user.getUserEmail())){
+            throw new IllegalArgumentException("権限がありません");
+        }
+        //日付チェック
+        if(request.getStartDate() == null || request.getEndDate() == null){
+            throw new IllegalArgumentException("開始日、終了日は必須入力です");
+        }
+        if(!request.getEndDate().isAfter(request.getStartDate())){
+            throw new IllegalArgumentException("終了日は開始日より後である必要があります");
+        }
+
+        schedule.setPeriodScheduleTitle(request.getScheduleTitle());
+        schedule.setStartDate(request.getStartDate());
+        schedule.setEndDate(request.getEndDate());
+        schedule.setScheduleMemo(request.getScheduleMemo());
+
+         PeriodScheduleEntity saved = periodScheduleRepository.save(schedule);
+        //resopnseDTOに置き換えてクライアントに返却
+        return PeriodScheduleResponse.builder()
+                .periodScheduleId(saved.getPeriodScheduleId())
+                .periodScheduleTitle(saved.getPeriodScheduleTitle())
+                .startDate(saved.getStartDate())
+                .endDate(saved.getEndDate())
+                .scheduleMemo(saved.getScheduleMemo())
+                .build();
     }
 }

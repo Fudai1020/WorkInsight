@@ -3,6 +3,9 @@ package com.workinsight.backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.workinsight.backend.dto.CalendarEventResponse;
+import com.workinsight.backend.dto.CreatePeriodSchedule;
+import com.workinsight.backend.dto.PeriodScheduleResponse;
 import com.workinsight.backend.dto.ScheduleFormRequest;
 import com.workinsight.backend.dto.ScheduleResponse;
 import com.workinsight.backend.enums.ScheduleRange;
@@ -42,9 +45,9 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleResponse>> getSchedules(Principal principal,@RequestParam("range") ScheduleRange range) {
         return ResponseEntity.ok(scheduleService.getSchedulesByRange(principal.getName(), range));
     }
-    @GetMapping("/period")
-    public ResponseEntity<List<ScheduleResponse>> getSchedulesByPeriod(Principal principal,@RequestParam LocalDate start,@RequestParam LocalDate end) {
-        return ResponseEntity.ok(scheduleService.getScheduleByPeriod(principal.getName(), start, end));
+    @GetMapping("/range")
+    public ResponseEntity<List<CalendarEventResponse>> getSchedulesByPeriod(Principal principal,@RequestParam LocalDate start,@RequestParam LocalDate end) {
+        return ResponseEntity.ok(scheduleService.getCalendarByPeriod(principal.getName(), start, end));
     }
     @PutMapping("/{id}")
     public ResponseEntity<ScheduleResponse> updateSchedule(Principal principal,@PathVariable Long id, @RequestBody @Valid ScheduleFormRequest request) {
@@ -53,5 +56,18 @@ public class ScheduleController {
         
         return ResponseEntity.ok().build();
     }
-    
+    @PostMapping("/period")
+    public ResponseEntity<PeriodScheduleResponse> createPeriodSchedule(Principal principal,@RequestBody @Valid CreatePeriodSchedule request) {
+        
+        PeriodScheduleResponse response = scheduleService.createPeriodSchedule(principal.getName(), request);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    @PutMapping("/period/{id}")
+    public ResponseEntity<ScheduleResponse> updatePeriodSchedule(Principal principal,@PathVariable Long id, @RequestBody @Valid CreatePeriodSchedule request) {
+
+        scheduleService.updatePeriodSchedule(principal.getName(),id,request);
+        
+        return ResponseEntity.ok().build();
+    }
 }

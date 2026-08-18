@@ -39,21 +39,21 @@ const TaskModal = () => {
     }
   return (
     <form onSubmit={submitForm}
-            className="flex flex-col h-full gap-4 sm:gap-12">
+          className="flex flex-col h-full gap-4 sm:gap-12">
         <h1 className="text-2xl sm:text-3xl flex justify-center items-center font-semibold mt-5">タスクの追加</h1>
-        <div className="grid gap-2 sm:gap-8  grid-cols-1 sm:grid-cols-[auto_minmax(280px,1fr)] w-full max-w-3xl mx-auto items-center">
-        <span className="text-2xl sm:text-3xl text-center sm:text-right">題名</span>
+        <div className="grid sm:gap-8  grid-cols-1 sm:grid-cols-[auto_minmax(280px,1fr)] w-full max-w-xl mx-auto items-center">
+            <span className="text-2xl sm:text-3xl text-center sm:text-right">題名</span>
             <input type="text"
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)} 
-                    className="bg-[#D9D9D9] rounded h-[40px] text-black focus:outline mx-auto w-full max-w-md
+                    className="bg-[#D9D9D9] rounded h-[40px] text-black focus:outline mx-auto w-full max-w-sm
                                p-4 text-xl shadow-md hover:scale-[1.05] transition-transform"/>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] w-full max-w-3xl mx-auto gap-4 items-center relative">
-            <span className="text-2xl sm:text-3xl text-center sm:text-right">優先度</span>
+        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] w-full max-w-xl mx-auto gap-4 items-center relative">
+            <span className="text-xl sm:text-3xl text-center sm:text-right">優先度</span>
             <div className="mx-auto flex items-center justify-center gap-2 sm:gap-10">
-            <span className="text-2xl sm:text-3xl font-semibold">{priorites.find(p=>p.value === priority)?.label}</span>
-            <span className="text-3xl" onClick={()=> setOpen(!open)}>▼</span>
+                <span className="text-2xl sm:text-3xl font-semibold">{priorites.find(p=>p.value === priority)?.label}</span>
+                <span className="text-3xl" onClick={()=> setOpen(!open)}>▼</span>
             </div>
             {open && (
                 <ul className="absolute left-1/2 -translate-x-1/2 bg-white shadow-md top-full rounded-md z-20 w-24">
@@ -69,17 +69,17 @@ const TaskModal = () => {
                 </ul>
             )}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] w-full max-w-3xl mx-auto gap-2 items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] w-full max-w-xl mx-auto gap-2 items-center">
             <span className="text-2xl sm:text-3xl text-center sm:text-right">期限</span>
             <input type="date" 
                    value={deadline}
                    onChange={(e)=>setDeadline(e.target.value)}
-                   className="bg-[#D9D9D9] rounded h-[40px] w-full max-w-md mx-auto text-center
+                   className="bg-[#D9D9D9] rounded h-[40px] w-full max-w-90 mx-auto text-center
                                     p-4 text-xl shadow-md hover:scale-[1.05] transition-transform"/>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] w-full max-w-3xl mx-auto gap-2 pt-3 items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] w-full max-w-xl mx-auto gap-2 pt-3 items-start">
             <span className="text-2xl sm:text-3xl text-center sm:text-right">メモ</span>
-            <textarea className="mx-auto bg-[#D9D9D9] rounded w-full max-w-md 
+            <textarea className="mx-auto bg-[#D9D9D9] rounded w-full max-w-sm 
                                  h-[120px] hover:scale-[1.05] transition-transform p-3"
                       value={taskMemo}
                       onChange={(e)=>setTaskMemo(e.target.value)}>
