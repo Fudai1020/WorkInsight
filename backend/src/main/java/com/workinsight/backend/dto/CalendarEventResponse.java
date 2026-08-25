@@ -20,6 +20,7 @@ public class CalendarEventResponse{
     private LocalDateTime end;
     private boolean isAllDay;
     private String memo;
+    private String color;
     public static CalendarEventResponse from(CalendarEventProjection projection){
         return CalendarEventResponse.builder()
                 .id(projection.getId())
@@ -29,6 +30,7 @@ public class CalendarEventResponse{
                 .end(projection.getEnd())
                 .isAllDay(Integer.valueOf(1).equals(projection.getAllday()))
                 .memo(projection.getMemo())
+                .color(projection.getColor())
                 .build();
     }
 

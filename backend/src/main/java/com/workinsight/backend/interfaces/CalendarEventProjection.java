@@ -12,4 +12,5 @@ public interface CalendarEventProjection {
     LocalDateTime getEnd();
     Integer getAllday();
     String getMemo();
+    String getColor();
 }

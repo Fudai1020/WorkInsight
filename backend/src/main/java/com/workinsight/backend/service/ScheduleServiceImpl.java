@@ -177,6 +177,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                                 .startDate(request.getStartDate())
                                 .endDate(request.getEndDate())
                                 .scheduleMemo(request.getScheduleMemo())
+                                .eventColor(request.getEventColor())
                                 .user(user)
                                 .build();
         PeriodScheduleEntity saved = periodScheduleRepository.save(periodSchedule);
@@ -187,6 +188,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .startDate(saved.getStartDate())
                 .endDate(saved.getEndDate())
                 .scheduleMemo(saved.getScheduleMemo())
+                .eventColor(saved.getEventColor())
                 .build();
     }
     //期間予定の更新処理
@@ -212,6 +214,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         schedule.setStartDate(request.getStartDate());
         schedule.setEndDate(request.getEndDate());
         schedule.setScheduleMemo(request.getScheduleMemo());
+        schedule.setEventColor(request.getEventColor());
 
          PeriodScheduleEntity saved = periodScheduleRepository.save(schedule);
         //resopnseDTOに置き換えてクライアントに返却
@@ -221,6 +224,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .startDate(saved.getStartDate())
                 .endDate(saved.getEndDate())
                 .scheduleMemo(saved.getScheduleMemo())
+                .eventColor(saved.getEventColor())
                 .build();
     }
 }

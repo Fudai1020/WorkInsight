@@ -19,6 +19,7 @@ public class PeriodScheduleResponse {
     private LocalDate startDate;
     private LocalDate endDate;
     private String scheduleMemo;
+    private String eventColor;
 
     public static PeriodScheduleResponse from(PeriodScheduleEntity entity){
         return PeriodScheduleResponse.builder()
@@ -27,6 +28,7 @@ public class PeriodScheduleResponse {
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
                 .scheduleMemo(entity.getScheduleMemo()) 
+                .eventColor(entity.getEventColor())
                 .build();
     }
 }

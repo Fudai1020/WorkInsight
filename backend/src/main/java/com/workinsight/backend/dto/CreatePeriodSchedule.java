@@ -16,4 +16,5 @@ public class CreatePeriodSchedule {
     private LocalDate startDate;
     private LocalDate endDate;
     private String scheduleMemo;
+    private String eventColor;
 }

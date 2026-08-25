@@ -48,6 +48,8 @@ public class PeriodScheduleEntity {
     @Column(name = "schedule_memo")
     private String scheduleMemo;
 
+    @Column(name = "event_color")
+    private String eventColor;
     @CreationTimestamp
     @Column(name = "created_at",updatable = false)
     private LocalDateTime createdAt;
