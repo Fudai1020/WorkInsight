@@ -3,7 +3,7 @@ import { useModal } from "../context/ModalContext";
 import { useAuth } from "../context/AuthContext";
 import { fetchWithAuth } from "../utils/FetchWithAuth";
 import { useDashboard } from "../context/DashboardContext";
-
+import {Compact} from "@uiw/react-color"
 
 
 const PeriodScheduleForm = () => {
@@ -14,6 +14,8 @@ const PeriodScheduleForm = () => {
   const [startDate,setStartDate] = useState("");
   const [endDate,setEndDate] = useState(""); 
   const {token,logout} = useAuth();
+  const [isOpenColor,setIsOpenColor] = useState(false);
+  const [eventColor,setEventColor] = useState("");
   
   //スケジュール登録リクエスト処理
   const submitForm = async (e:React.FormEvent) =>{
@@ -31,7 +33,8 @@ const PeriodScheduleForm = () => {
           scheduleTitle,
           startDate,
           endDate,
-          scheduleMemo
+          scheduleMemo,
+          eventColor        //予定の色
         })
       })
       //リクエスト成功
@@ -50,9 +53,14 @@ const PeriodScheduleForm = () => {
     return date.toISOString().slice(0,10);
   }
 
+  //色選択時の処理
+  const colorChange = (color:any) => {
+    setEventColor(color.hex);
+    setIsOpenColor((prev) => !prev);
+  }
+
   //編集時に渡されるデータをセット
   useEffect(() => {
-    console.log(modalData)
     if(modalData?.mode === 'edit'){
       if(modalData.kind === 'period'){
         const event = modalData.event;
@@ -65,9 +73,10 @@ const PeriodScheduleForm = () => {
 
   },[modalData])
 
+
   return (
     <form onSubmit={submitForm}
-          className="flex flex-col h-full gap-4 sm:gap-13 border rounded-md shadow-md">
+          className="flex flex-col h-full gap-3 sm:gap-12 border rounded-md shadow-md">
       <div className="grid grid-cols-1 gap-3 sm:gap-10 sm:grid-cols-[auto_minmax(280px,1fr)_auto] max-w-3xl mx-auto items-center mt-15">
         <span className="text-2xl text-center sm:text-3xl sm:text-right">題名</span>
         <input type="text"
@@ -91,6 +100,30 @@ const PeriodScheduleForm = () => {
                   className="bg-[#D9D9D9] p-2 rounded-md text-md w-30 hover:scale-[1.05] transition-transform" />
         </div>
       </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-[80px_minmax(300px,1fr)_auto] max-m-3xl mx-auto gap-2 sm:gap-10 items-center">
+        <span className="text-2xl text-center sm:text-3xl">色</span>
+        <div className="relative flex justify-center items-center gap-2">
+          <button type="button" 
+                  className="flex items-center gap-2 bg-[#D9D9D9] p-2 rounded hover:scale-[1.05] transition-transform"
+                  onClick={() => setIsOpenColor((prev) => !prev)}>
+            <span className="h-5 w-5 rounded-full border"
+                  style={{backgroundColor:eventColor}}/>
+            <span>色を選択</span>
+
+          </button>
+          {isOpenColor &&
+            <div className="absolute z-50 top-full mt-2">
+                <Compact  
+                      color={eventColor}
+                      onChange={colorChange}/>
+            </div>
+          }
+        </div>
+      </div>
+
+
+
 
       <div className="grid grid-cols-1 sm:grid-cols-[auto_minmax(280px,1fr)_auto] mx-auto sm:gap-10 items-center">
         <span className="text-2xl text-center sm:text-3xl sm:text-right">メモ</span>

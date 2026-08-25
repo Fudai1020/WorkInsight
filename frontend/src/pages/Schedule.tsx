@@ -41,6 +41,10 @@ const Schedule = () => {
           start:s.start,
           end:s.end,
           allDay:s.allDay,
+          ...(s.color && {
+            backgroundColor:s.color,
+            borderColor:s.color
+          }),
           extendedProps:{
             sourceId:s.id,
             scheduleMemo:s.memo,
@@ -48,7 +52,6 @@ const Schedule = () => {
           }
         };
       });
-      console.log(formatted)
       setEvents(formatted);
     }catch(err){
       console.error(err);
@@ -104,7 +107,6 @@ const Schedule = () => {
         }}
         eventClick={(info) => handleEventClick(info)}
         selectable={true}
-        
         height={'100%'}
         />
         <div className="flex justify-center mt-5">
